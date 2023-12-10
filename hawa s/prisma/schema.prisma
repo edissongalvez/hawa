@@ -1,0 +1,122 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// Product management
+
+model ProductCategory {
+  id          Int       @id @default(autoincrement())
+  name        String    @db.VarChar(32)
+  desc        String    @db.VarChar(128)
+  createdAt   DateTime  @default(now())
+  modifiedAt  DateTime  @updatedAt
+  deletedAt   DateTime?
+  products    Product[]
+}
+
+model ProductInventory {
+  id          Int       @id @default(autoincrement())
+  quantity    Int
+  createdAt   DateTime  @default(now())
+  modifiedAt  DateTime  @updatedAt
+  deletedAt   DateTime?
+  product     Product?
+}
+
+model Discount {
+  id              Int       @id @default(autoincrement())
+  name            String    @db.VarChar(32)
+  desc            String    @db.VarChar(128)
+  discountPercent Decimal
+  active          Boolean   @default(false)
+  createdAt       DateTime  @default(now())
+  modifiedAt      DateTime  @updatedAt
+  deletedAt       DateTime?
+  products        Product[]
+}
+
+model Product {
+  id          Int               @id @default(autoincrement())
+  name        String            @db.VarChar(32)
+  desc        String            @db.VarChar(128)
+  image       String            
+  categoryId  Int
+  inventoryId Int               @unique
+  price       Decimal
+  discountId  Int?
+  createdAt   DateTime          @default(now())
+  modifiedAt  DateTime          @updatedAt
+  deletedAt   DateTime?
+  category    ProductCategory   @relation(fields: [categoryId], references: [id])
+  inventory   ProductInventory  @relation(fields: [inventoryId], references: [id])
+  discount    Discount?          @relation(fields: [discountId], references: [id])
+}
+
+// User management
+
+model AdminType {
+  id          Int       @id @default(autoincrement())
+  adminType   String    @db.VarChar(32)
+  permissions String    @db.VarChar(128)
+  createdAt   DateTime  @default(now())
+  modifiedAt  DateTime  @updatedAt
+  adminUsers  AdminUser[]
+}
+
+model AdminUser {
+  id          Int       @id @default(autoincrement())
+  username    String    @unique @db.VarChar(32)
+  password    String    @db.VarChar(64)
+  image       String?
+  firstName   String    @db.VarChar(64)
+  lastName    String    @db.VarChar(64)
+  typeId      Int
+  lastLogin   DateTime?
+  createdAt   DateTime  @default(now())
+  modifiedAt  DateTime  @updatedAt
+  type        AdminType @relation(fields: [typeId], references: [id])
+}
+
+model User {
+  id          Int       @id @default(autoincrement())
+  username    String    @unique @db.VarChar(32)
+  password    String    @db.VarChar(64)
+  image       String?
+  firstName   String    @db.VarChar(64)
+  lastName    String    @db.VarChar(64)
+  createdAt   DateTime  @default(now())
+  modifiedAt  DateTime  @updatedAt
+  addresses     UserAddress[]
+  payments    UserPayment[] 
+}
+
+model UserAddress {
+  id          Int     @id @default(autoincrement())
+  userId      Int
+  addressLine String  @db.VarChar(128)
+  city        String  @db.VarChar(16)
+  postalCode  String  @db.VarChar(5)
+  country     String  @db.VarChar(16)
+  telephone   String  @db.VarChar(9)
+  user        User    @relation(fields: [userId], references: [id])
+}
+
+model UserPayment {
+  id          Int     @id @default(autoincrement())
+  userId      Int
+  paymentType String  @db.VarChar(16)
+  provider    String  @db.VarChar(16)
+  accountNo   String  @db.VarChar(20)
+  expiry      DateTime
+  user        User    @relation(fields: [userId], references: [id])
+}
+
+// Shopping process
