@@ -43,7 +43,7 @@ export default function CreateDiscountScreen() {
         try {
             DiscountController.createDiscount(data.name, data.desc, data.discountPercent, data.active, selectedProducts)
             router.replace('/offers')
-            Notify({ title: 'Descuento guardado y activado', desc: 'Descuentos actualizados' })
+            Notify({ title: 'Descuento guardado', desc: 'Descuentos actualizados' })
         } catch (error) {
             Notify({ title: 'Descuento no guardado', desc: 'Revise los datos' })
         }

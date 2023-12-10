@@ -37,7 +37,7 @@ export default function TabThreeScreen() {
                     
                 </>  
             :
-                <Text>Para usar Hawa, <Link href={'/user/login'}><Text tint>inicie sesión</Text></Link></Text>
+                <Text>Para usar la aplicación Bambino, <Link href={'/user/login'}><Text tint>inicie sesión</Text></Link>.</Text>
             }
             
         </Body>

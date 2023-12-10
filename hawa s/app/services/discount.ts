@@ -9,7 +9,7 @@ export const createDiscount = async (name: string, desc: string, discountPercent
             name: name,
             desc: desc,
             discountPercent: discountPercent,
-            active: active,
+            active: Boolean(active),
             products: {
                 connect: products
             }
