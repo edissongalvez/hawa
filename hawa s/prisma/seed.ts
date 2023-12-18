@@ -90,6 +90,7 @@ async function main() {
 
     const newUsers = await prisma.user.createMany({
         data: [
+            { username: 'administrador', password: await hashPassword('contraseña'), image: 'files\\users\\image.webp', firstName: 'Admin', lastName: 'Istrador', adminUser: true },
             { username: 'annelyon', password: await hashPassword('contraseña'), image: 'files\\users\\image.webp', firstName: 'Anne', lastName: 'Lyon' },
             { username: 'janesmith', password: await hashPassword('contraseña'), image: 'files\\users\\image.webp', firstName: 'Jane', lastName: 'Smith' },
             { username: 'michaeljones', password: await hashPassword('contraseña'), image: 'files\\users\\image.webp', firstName: 'Michael', lastName: 'Jones' },
@@ -99,21 +100,25 @@ async function main() {
 
     const newUserAddresses = await prisma.userAddress.createMany({
         data: [
-            { userId: 1, addressLine: '123 Main Street', city: 'Trujillo', postalCode: '12345', country: 'Perú', telephone: '123456789' },
-            { userId: 2, addressLine: '456 Oak Avenue', city: 'Trujillo', postalCode: '54321', country: 'Perú', telephone: '987654321' },
-            { userId: 3, addressLine: '789 Pine Street', city: 'Trujillo', postalCode: '67890', country: 'Perú', telephone: '201234567' },
-            { userId: 4, addressLine: '101 Cedar Lane', city: 'Trujillo', postalCode: '11223', country: 'Perú', telephone: '298765432' },
+            { userId: 2, addressLine: '123 Main Street', city: 'Trujillo', postalCode: '12345', country: 'Perú', telephone: '123456789' },
+            { userId: 3, addressLine: '456 Oak Avenue', city: 'Trujillo', postalCode: '54321', country: 'Perú', telephone: '987654321' },
+            { userId: 4, addressLine: '789 Pine Street', city: 'Trujillo', postalCode: '67890', country: 'Perú', telephone: '201234567' },
+            { userId: 5, addressLine: '101 Cedar Lane', city: 'Trujillo', postalCode: '11223', country: 'Perú', telephone: '298765432' },
         ]
     })
 
     const newUserPayments = await prisma.userPayment.createMany({
         data: [
-            { userId: 1, paymentType: 'Yape', provider: 'BCP', accountNo: '123456789', expiry: '2023-12-31T23:59:59.999Z' },
-            { userId: 2, paymentType: 'Plin', provider: 'Interbank', accountNo: '987654321', expiry: '2024-06-30T23:59:59.999Z' },
-            { userId: 3, paymentType: 'Yape', provider: 'BCP', accountNo: '201234567', expiry: '2023-10-15T23:59:59.999Z' },
-            { userId: 4, paymentType: 'Plin', provider: 'Interbank', accountNo: '298765432', expiry: '2025-03-01T23:59:59.999Z' },
+            { userId: 2, paymentType: 'Yape', provider: 'BCP', accountNo: '123456789', expiry: '2023-12-31T23:59:59.999Z' },
+            { userId: 3, paymentType: 'Plin', provider: 'Interbank', accountNo: '987654321', expiry: '2024-06-30T23:59:59.999Z' },
+            { userId: 4, paymentType: 'Yape', provider: 'BCP', accountNo: '201234567', expiry: '2023-10-15T23:59:59.999Z' },
+            { userId: 5, paymentType: 'Plin', provider: 'Interbank', accountNo: '298765432', expiry: '2025-03-01T23:59:59.999Z' },
         ]
     })
+
+    // Shopping process
+
+    
 }
 
 main()

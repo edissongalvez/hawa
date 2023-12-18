@@ -6,7 +6,7 @@ import { Text, View } from '../components/Themed';
 export default function NotFoundScreen() {
   return (
     <>
-      <Stack.Screen options={{ title: 'Hawa desaparecida' }} />
+      <Stack.Screen options={{ title: 'Desaparecido' }} />
       <View style={styles.container}>
         <Text style={styles.title}>No debería estar aquí</Text>
 

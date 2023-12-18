@@ -1,11 +1,13 @@
 // import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Ionicons } from '@expo/vector-icons'
 import { Link, Tabs, router } from 'expo-router'
-import { Pressable, View, useColorScheme } from 'react-native'
+import { Pressable, StyleSheet, View, useColorScheme } from 'react-native'
 
 import Colors from '../../constants/Colors'
 import { useUser } from '../../context/UserContext'
 import { Notify } from '../../components/Window'
+import { BlurView } from 'expo-blur'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 
 
@@ -26,6 +28,7 @@ export default function TabLayout() {
   const handleLogout = async () => {
     try {
         setUser(null)
+        // await AsyncStorage.clear()
         router.push('/')
         Notify({ title: 'Sesión cerrada', desc: 'Hasta pronto' })
     } catch (error) {
@@ -36,7 +39,11 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint
+        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        tabBarStyle: { position: 'absolute', borderWidth: 0 },
+        tabBarBackground: () => <BlurUI />,
+        headerTransparent: true,
+        headerBackground: () => <BlurUI />
       }}>
       <Tabs.Screen
         name='offers'
@@ -44,7 +51,7 @@ export default function TabLayout() {
           title: 'Ofertas',
           tabBarIcon: ({ color }) => <TabBarIcon name='pricetags' color={color} />,
           headerRight: () => (
-            user ? <View style={{ flexDirection: 'row' }}>
+            user?.adminUser ? <View style={{ flexDirection: 'row' }}>
               <Link href='/discount/create' asChild>
                 <Pressable>
                   {({ pressed }) => (
@@ -67,7 +74,7 @@ export default function TabLayout() {
           title: 'Orden',
           tabBarIcon: ({ color }) => <TabBarIcon name='fast-food' color={color} />,
           headerRight: () => (
-            user ? <View style={{ flexDirection: 'row' }}>
+            user?.adminUser ? <View style={{ flexDirection: 'row' }}>
               <Link href='/productCategory/create' asChild>
                 <Pressable>
                   {({ pressed }) => (
@@ -101,7 +108,48 @@ export default function TabLayout() {
         options={{
           title: 'Carrito',
           tabBarIcon: ({ color }) => <TabBarIcon name='cart' color={color} />,
-          
+          headerRight: () => (
+            user ? <View style={{ flexDirection: 'row' }}>
+              {user.adminUser &&
+                <Link href='/orderDetails' asChild>
+                <Pressable>
+                  {({ pressed }) => (
+                    <Ionicons
+                      name='file-tray-stacked-outline'
+                      size={25}
+                      color={Colors[colorScheme ?? 'light'].tint}
+                      style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+                    />
+                  )}
+                </Pressable>
+              </Link>
+              }
+              <Link href='/orderDetails' asChild>
+                <Pressable>
+                  {({ pressed }) => (
+                    <Ionicons
+                      name='receipt-outline'
+                      size={25}
+                      color={Colors[colorScheme ?? 'light'].tint}
+                      style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+                    />
+                  )}
+                </Pressable>
+              </Link>
+              <Link href='/paymentDetail/create' asChild>
+                <Pressable>
+                  {({ pressed }) => (
+                    <Ionicons
+                      name='cash-outline'
+                      size={25}
+                      color={Colors[colorScheme ?? 'light'].tint}
+                      style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+                    />
+                  )}
+                </Pressable>
+            </Link>
+          </View> : null
+          ),
         }} 
       />
       <Tabs.Screen
@@ -124,5 +172,11 @@ export default function TabLayout() {
         }} 
       />
     </Tabs>
-  );
+  )
+}
+
+function BlurUI () {
+  const colorScheme = useColorScheme()
+
+  return <BlurView tint={colorScheme === 'light' ? 'light' : 'dark'} intensity={100} style={StyleSheet.absoluteFill} />
 }

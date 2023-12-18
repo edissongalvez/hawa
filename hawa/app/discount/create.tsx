@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
 import { Image, StyleSheet, View } from 'react-native'
-import { Body, Box, Button, Picker, PickerItem, ScrollView, Separator, Text, TextField, Toggle } from '../../components/Themed'
+import { Body, Box, Button, Picker, PickerItem, ScrollView, Separator, Text, TextField, Toggle, TrailingButton } from '../../components/Themed'
 import ProductController, { Product } from '../../classes/product'
 import { Notify } from '../../components/Window'
 import DiscountController from '../../classes/discount'
 import Url from '../../constants/Url'
-import { router } from 'expo-router'
+import { Stack, router } from 'expo-router'
 
 export default function CreateDiscountScreen() {
     const [products, setProducts] = useState<(Product & { checked?: boolean })[]>([])
@@ -50,39 +50,42 @@ export default function CreateDiscountScreen() {
     }
 
     return (
-        <Body>
-            <Box header='DESCUENTO' footer='Recopila información clave sobre el descuento creado.'>
-                <TextField placeholder='Ingrese nombre' value={data.name} onChangeText={handleChange('name')} />
-                <Separator />
-                <TextField placeholder='Ingrese descripción' value={data.desc} onChangeText={handleChange('desc')} />
-                <Separator />
-                <TextField placeholder='Ingrese porcentaje de descuento' inputMode='decimal' value={data.discountPercent.toString()} onChangeText={handleChange('discountPercent')} />
-                <Separator />
-                <Picker selectedValue={data.active} onValueChange={selectedValue => setData(prevData => ({ ...prevData, active: selectedValue as boolean }))}>
-                    <PickerItem label='Inactivo' value={false} />
-                    <PickerItem label='Activo' value={true} />
-                </Picker>
-            </Box>
-            <Box header='PRODUCTOS' footer='Aplique el descuento en los productos seleccionados. Si el producto ya tiene un descuento, se reemplazará con el nuevo descuento a aplicar.'>
-                {products ? products.map(product => (
-                    <View key={product.id}>
-                        <View style={styles.listItem}>
-                            <View style={styles.itemProd}>
-                                <Image style={styles.image} source={{ uri: `${Url.api}/${product.image.replace(/\\/g, '/')}` }} />
-                                <View>
-                                    <Text>{product.name}</Text>
-                                    {product.discountId > 1 ? <Text style={styles.desc} tint>Con descuento</Text> : <Text style={styles.desc} secondary>Sin descuento</Text>}
+        <>
+            <Stack.Screen options={{ title: 'Crear descuento', presentation: 'formSheet', headerTitleAlign: 'center', headerRight: () => <TrailingButton onPress={handleSubmit} label='Guardar' /> }} />
+            <Body>
+                <Box header='DESCUENTO' footer='Recopila información clave sobre el descuento creado.'>
+                    <TextField placeholder='Ingrese nombre' value={data.name} onChangeText={handleChange('name')} />
+                    <Separator />
+                    <TextField placeholder='Ingrese descripción' value={data.desc} onChangeText={handleChange('desc')} />
+                    <Separator />
+                    <TextField placeholder='Ingrese porcentaje de descuento' inputMode='decimal' value={data.discountPercent.toString()} onChangeText={handleChange('discountPercent')} />
+                    <Separator />
+                    <Picker selectedValue={data.active} onValueChange={selectedValue => setData(prevData => ({ ...prevData, active: selectedValue as boolean }))}>
+                        <PickerItem label='Inactivo' value={false} />
+                        <PickerItem label='Activo' value={true} />
+                    </Picker>
+                </Box>
+                <Box header='PRODUCTOS' footer='Aplique el descuento en los productos seleccionados. Si el producto ya tiene un descuento, se reemplazará con el nuevo descuento a aplicar.'>
+                    {products ? products.map(product => (
+                        <View key={product.id}>
+                            <View style={styles.listItem}>
+                                <View style={styles.itemProd}>
+                                    <Image style={styles.image} source={{ uri: `${Url.api}/${product.image.replace(/\\/g, '/')}` }} />
+                                    <View>
+                                        <Text>{product.name}</Text>
+                                        {product.discountId > 1 ? <Text style={styles.desc} tint>Con descuento</Text> : <Text style={styles.desc} secondary>Sin descuento</Text>}
+                                    </View>
+                                    
                                 </View>
-                                
+                                <Toggle value={product.checked} onValueChange={() => handleToggleChange(product.id)}  />
                             </View>
-                            <Toggle value={product.checked} onValueChange={() => handleToggleChange(product.id)}  />
+                            <Separator />
                         </View>
-                        <Separator />
-                    </View>
-                )) : <Text>Cargando...</Text>}
-            </Box>
-            <Button action='Guardar' onPress={handleSubmit}/>
-        </Body>
+                    )) : <Text>Cargando...</Text>}
+                </Box>
+                {/* <Button action='Guardar' onPress={handleSubmit}/> */}
+            </Body>
+        </>
     )
 }
 

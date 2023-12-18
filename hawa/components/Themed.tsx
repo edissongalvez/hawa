@@ -4,7 +4,7 @@
  */
 
 import React from 'react'
-import { StyleSheet, Text as DefaultText, useColorScheme, View as DefaultView, ScrollView as DefaultScrollView, Pressable as DefaultPressable, TextInput as DefaultTextInput } from 'react-native'
+import { StyleSheet, Text as DefaultText, useColorScheme, View as DefaultView, ScrollView as DefaultScrollView, Pressable as DefaultPressable, TextInput as DefaultTextInput, Pressable } from 'react-native'
 import { Picker as DefaultPicker } from '@react-native-picker/picker'
 import Checkbox from 'expo-checkbox'
 
@@ -145,6 +145,20 @@ export function Separator(props: ViewProps) {
   return <DefaultView style={[{ backgroundColor }, styles.separator]}  />
 }
 
+export function Trailing(props: {children: React.ReactNode}) {
+  return <DefaultView style={styles.trailing}>
+    {props.children}
+  </DefaultView>
+}
+
+export function TrailingButton(props: { onPress: () => void, label: string }) {
+  return <Pressable onPress={props.onPress}>
+    {({ pressed }) => (
+      <Text tint style={{ fontWeight: '500', marginRight: 15, opacity: pressed ? 0.5 : 1 }} >{props.label}</Text>
+    )} 
+  </Pressable>
+}
+
 const styles = StyleSheet.create({
   body: {
     flex: 1,
@@ -154,11 +168,17 @@ const styles = StyleSheet.create({
     gap: 16,
     maxWidth: 672,
     width: '100%',
-    alignSelf: 'center'
+    alignSelf: 'center',
+    marginBottom: 49,
+    marginTop: 64
   },
   separator: {
     marginHorizontal: 16,
     height: 1,
     // width: '80%',
+  },
+  trailing: {
+    flexDirection: 'row'
   }
+
 })

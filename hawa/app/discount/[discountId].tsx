@@ -1,49 +1,50 @@
 import { useEffect, useState } from 'react'
 import { Image, StyleSheet, View } from 'react-native'
-import { Link, router, useLocalSearchParams } from 'expo-router'
+import { Link, Stack, router, useLocalSearchParams } from 'expo-router'
 
 import DiscountController, { Discount } from '../../classes/discount'
-import { Body, Button, Text } from '../../components/Themed'
+import { Body, Button, Text, Trailing, TrailingButton } from '../../components/Themed'
 import Url from '../../constants/Url'
+import { useUser } from '../../context/UserContext'
 
 export default function DiscountScreen() {
+    const { user } = useUser()
     const { discountId } = useLocalSearchParams<{ discountId: string }>()
     const [discount, setDiscount] = useState<Discount>()
 
     useEffect(() => {
       DiscountController.getDiscount(Number(discountId)).then(discount => setDiscount(discount))
-    }, [])
+    }, [discount])
 
-    return (
-        <Body>
-            { discount ? (
-                <>
-                    { discount.id != 1 ? 
-                        <Link style={{ textAlign: 'right' }} href={`/discount/edit/${discount.id}`}>
-                            <Text tint>Editar</Text>
-                        </Link> 
-                    : null }
-                    <View>
-                        <Text style={styles.title}>{ discount.name }</Text>
-                        <Text style={styles.desc} secondary>{ discount.desc }</Text>
-                    </View>
-                    { discount.products.length > 0 ? discount.products.map(product => (
-                        <View style={styles.itemContent} key={product.id}>
-                            <View style={styles.item}>
-                                <Image source={{ uri: `${Url.api}/${product.image.replace(/\\/g, '/')}` }} style={discount.active ? styles.image : styles.imageFilter} />
-                                <View>
-                                    <Text secondary>{ product.categoryId }</Text>
-                                    <Text>{ product.name }</Text>
-                                </View>
+    return discount ?
+        <>
+            <Stack.Screen options={{ title: 'Descuento', presentation: 'card', headerTitleAlign: 'center', headerRight: () => user?.adminUser ? <TrailingButton onPress={() => router.push(`/discount/edit/${discount.id}`)} label='Editar' /> : null }} />
+            <Body>
+                        {/* { discount.id != 1 ? 
+                            <Link style={{ textAlign: 'right' }} href={`/discount/edit/${discount.id}`}>
+                                <Text tint>Editar</Text>
+                            </Link> 
+                        : null } */}
+                <View>
+                    <Text style={styles.title}>{ discount.name }</Text>
+                    <Text style={styles.desc} secondary>{ discount.desc }</Text>
+                </View>
+                { discount.products.length > 0 ? discount.products.map(product => (
+                    <View style={styles.itemContent} key={product.id}>
+                        <View style={styles.item}>
+                            <Image source={{ uri: `${Url.api}/${product.image.replace(/\\/g, '/')}` }} style={discount.active ? styles.image : styles.imageFilter} />
+                            <View>
+                                <Text secondary>{ product.categoryId }</Text>
+                                <Text>{ product.name }</Text>
                             </View>
-                            
-                            <Button tertiary action={ `S/. ${ discount.active ? (product.price * (1 - discount.discountPercent)).toFixed(2) : Number(product.price).toFixed(2)}` } onPress={() => router.replace(`/product/${product.id}`)} />
                         </View>
-                    )) : <View style={{ height: '100%', alignItems: 'center', justifyContent: 'center' }}><Text tertiary>Sin productos</Text></View> }
-                </>
-            ) : <Text tertiary>Cargando...</Text> }
-        </Body>
-    )
+                        
+                        <Button tertiary action={ `S/. ${ discount.active ? (product.price * (1 - discount.discountPercent)).toFixed(2) : Number(product.price).toFixed(2)}` } onPress={() => router.replace(`/product/${product.id}`)} />
+                    </View>
+                )) : <View style={{ height: '100%', alignItems: 'center', justifyContent: 'center' }}><Text tertiary>Sin productos</Text></View> }
+            </Body>
+        </>
+    : <Text tertiary>Cargando...</Text> 
 }
 
 const styles = StyleSheet.create({

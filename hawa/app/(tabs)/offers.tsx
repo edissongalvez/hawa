@@ -11,8 +11,8 @@ export default function TabTwoScreen() {
   const [discounts, setDiscounts] = useState<Discount[]>()
 
   useEffect(() => {
-    DiscountController.getDiscounts().then(discounts => setDiscounts(discounts))
-  }, [])
+    DiscountController.getDiscounts().then(discounts => setDiscounts(discounts.slice(1)))
+  }, [discounts])
 
   return (
     <Body>

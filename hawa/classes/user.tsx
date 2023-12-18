@@ -4,6 +4,8 @@ import Url from '../constants/Url'
 import { useUser } from '../context/UserContext'
 import { UserAddress } from './userAddress'
 import { UserPayment } from './userPayment'
+import { ShoppingSession } from './shoppingSession'
+import { OrderDetail } from './orderDetail'
 
 export interface User {
     id: number,
@@ -12,10 +14,13 @@ export interface User {
     image: string,
     firstName: string,
     lastName: string,
+    adminUser: boolean,
     createdAt: Date,
     modifiedAt: Date,
     addresses: UserAddress[],
-    payments: UserPayment[]
+    payments: UserPayment[],
+    session: ShoppingSession,
+    orders: OrderDetail[]
 }
 
 export default class UserController {

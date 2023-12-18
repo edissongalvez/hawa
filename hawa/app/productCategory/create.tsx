@@ -2,8 +2,9 @@ import { useState } from 'react'
 import { Alert, Platform, StyleSheet } from 'react-native'
 import { StatusBar } from 'expo-status-bar'
 
-import { Body, Box, Button, ScrollView, Separator, TextField } from '../../components/Themed'
+import { Body, Box, Button, ScrollView, Separator, TextField, TrailingButton } from '../../components/Themed'
 import ProductCategoryController from '../../classes/productCategory'
+import { Stack } from 'expo-router'
 
 export default function CreateProductCategoryScreen() {
   const [data, setData] = useState({
@@ -27,6 +28,8 @@ export default function CreateProductCategoryScreen() {
   }
 
   return (
+    <>
+    <Stack.Screen options={{ title: 'Crear categoría', presentation: 'formSheet', headerTitleAlign: 'center', headerRight: () => <TrailingButton onPress={handleSubmit} label='Guardar' /> }} />
     <Body>
       <Box footer='Una vez creada la categoría, podrás agregar productos cuando crees o edites productos.'>
         <TextField placeholder='Ingrese nombre' value={data.name} onChangeText={handleChange('name')} />
@@ -37,6 +40,7 @@ export default function CreateProductCategoryScreen() {
 
       <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
     </Body>
+    </>
   )
 }
 

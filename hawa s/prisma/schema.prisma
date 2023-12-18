@@ -58,6 +58,8 @@ model Product {
   category    ProductCategory   @relation(fields: [categoryId], references: [id])
   inventory   ProductInventory  @relation(fields: [inventoryId], references: [id])
   discount    Discount?          @relation(fields: [discountId], references: [id])
+  cartItems   CartItem[]
+  orderItems  OrderItems[]
 }
 
 // User management
@@ -92,10 +94,13 @@ model User {
   image       String?
   firstName   String    @db.VarChar(64)
   lastName    String    @db.VarChar(64)
+  adminUser   Boolean   @default(false)
   createdAt   DateTime  @default(now())
   modifiedAt  DateTime  @updatedAt
-  addresses     UserAddress[]
+  addresses   UserAddress[]
   payments    UserPayment[] 
+  session     ShoppingSession? 
+  orders      OrderDetails[]
 }
 
 model UserAddress {
@@ -120,3 +125,58 @@ model UserPayment {
 }
 
 // Shopping process
+
+model ShoppingSession {
+  id          Int       @id @default(autoincrement())
+  userId      Int       @unique
+  total       Decimal
+  createdAt   DateTime  @default(now())
+  modifiedAt  DateTime  @updatedAt
+  user        User      @relation(fields: [userId], references: [id])
+  cartItems   CartItem[]
+}
+
+model CartItem {
+  id          Int             @id @default(autoincrement())
+  sessionId   Int
+  productId   Int
+  quantity    Int 
+  createdAt   DateTime        @default(now())
+  modifiedAt  DateTime        @updatedAt
+  session     ShoppingSession @relation(fields: [sessionId], references: [id])
+  product     Product         @relation(fields: [productId], references: [id])
+}
+
+model OrderDetails {
+  id          Int       @id @default(autoincrement())
+  userId      Int
+  total       Decimal
+  paymentId   Int
+  createdAt   DateTime  @default(now())
+  modifiedAt  DateTime  @updatedAt
+  user        User      @relation(fields: [userId], references: [id])
+  payment     PaymentDetails?
+  orderItems  OrderItems[] 
+}
+
+model OrderItems {
+  id          Int           @id @default(autoincrement())
+  orderId     Int
+  productId   Int
+  quantity    Int
+  createdAt   DateTime      @default(now())
+  modifiedAt  DateTime      @updatedAt
+  order       OrderDetails  @relation(fields: [orderId], references: [id])
+  product     Product       @relation(fields: [productId], references: [id])
+}
+
+model PaymentDetails {
+  id          Int           @id @default(autoincrement())
+  orderId     Int           @unique
+  amount      Int
+  provider    String        @db.VarChar(16)
+  status      String        @db.VarChar(16)
+  createdAt   DateTime      @default(now())
+  modifiedAt  DateTime      @updatedAt
+  order       OrderDetails  @relation(fields: [orderId], references: [id])
+}

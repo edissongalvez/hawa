@@ -10,38 +10,34 @@ import Url from '../../constants/Url'
 export default function TabThreeScreen() {
     const { user } = useUser()
 
-    return (
+    return user ? 
         <Body>
-            {user ? 
-                <>
-                    <Header title={`Hola, ${user.firstName} ${user.lastName}`} />
-                    <Image style={styles.image} source={{ uri: `${Url.api}/${user.image.replace(/\\/g, '/')}` }} />
-                    <Box>
-                        <BoxItem name='Usuario' value={user.username} />
-                        <Separator />
-                        <BoxItem name='Nombre' value={user.firstName} />
-                        <Separator />
-                        <BoxItem name='Apellido' value={user.lastName} />
-                    </Box>
-                    <Button secondary action='Editar cuenta' onPress={() => router.push('/user/edit')}/>
+            <Header title={`Hola, ${user.firstName} ${user.lastName}`} />
+            <Image style={styles.image} source={ user.image ? { uri: `${Url.api}/${user.image.replace(/\\/g, '/')}`} : require('../../assets/images/icon.png') } />
+            <Box>
+                <BoxItem name='Usuario' value={user.username} />
+                <Separator />
+                <BoxItem name='Nombre' value={user.firstName} />
+                <Separator />
+                <BoxItem name='Apellido' value={user.lastName} />
+            </Box>
+            <Button secondary action='Editar cuenta' onPress={() => router.push('/user/edit')}/>
 
-                    <Box header='MÉTODOS DE PAGO' footer='Se aceptan tarjetas de crédito, débito y otras formas seguras de pago para realizar transacciones en la aplicación.'>
-                        { user.payments ? user.payments.map(payment => <View key={payment.id}><BoxItem  name={`${payment.paymentType} - ${payment.provider}`} value={payment.accountNo} /><Separator /></View>) : null }
-                    </Box>
-                    <Button secondary action='Agregar método de pago'/>
-                    <Box header='DIRECCIONES' footer='Indica las direcciones donde deseas recibir tus pedidos, asegurándote de proporcionar la ubicación más conveniente para garantizar una entrega eficiente.'>
-                        { user.addresses ? user.addresses.map(address => <View key={address.id}><BoxItem name={`${address.addressLine} - ${address.telephone}`} value={address.postalCode} /><Separator /></View>) : null }
-                    </Box>
+            <Box header='MÉTODOS DE PAGO' footer='Se aceptan tarjetas de crédito, débito y otras formas seguras de pago para realizar transacciones en la aplicación.'>
+                { user.payments ? user.payments.map(payment => <View key={payment.id}><BoxItem  name={`${payment.paymentType} - ${payment.provider}`} value={payment.accountNo} /><Separator /></View>) : null }
+            </Box>
+            <Button secondary action='Agregar método de pago'/>
+            <Box header='DIRECCIONES' footer='Indica las direcciones donde deseas recibir tus pedidos, asegurándote de proporcionar la ubicación más conveniente para garantizar una entrega eficiente.'>
+                { user.addresses ? user.addresses.map(address => <View key={address.id}><BoxItem name={`${address.addressLine} - ${address.telephone}`} value={address.postalCode} /><Separator /></View>) : null }
+            </Box>
 
-                    <Button secondary action='Agregar dirección'/>
-                    
-                </>  
-            :
-                <Text>Para usar la aplicación Bambino, <Link href={'/user/login'}><Text tint>inicie sesión</Text></Link>.</Text>
-            }
-            
+            <Button secondary action='Agregar dirección'/>
         </Body>
-    )
+    :
+        <Body center>
+            <Text style={styles.textLogin}>Para usar la aplicación Bambino, <Link href={'/user/login'}><Text tint>inicie sesión</Text></Link>.</Text>
+        </Body>
+            
 }
 
 const styles = StyleSheet.create({
@@ -53,6 +49,9 @@ const styles = StyleSheet.create({
         height: 128,
         width: 128,
         borderRadius: 64,
+        alignSelf: 'center'
+    },
+    textLogin: {
         alignSelf: 'center'
     }
 })

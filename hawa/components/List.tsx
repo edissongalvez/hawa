@@ -19,7 +19,7 @@ export function HorizontalList(
                             <View style={styles.item}>
                                 {/* <Image style={styles.itemImage} source={{ uri: Url.api + '/' + item.image }} /> */}
                                 <Image style={styles.itemImage} source={{ uri: `${Url.api}/${item.image.replace(/\\/g, '/')}` }} />
-                                <Text style={styles.itemText}>
+                                <Text style={styles.itemText} numberOfLines={1}>
                                     {item.name}
                                 </Text>
                                 <View style={styles.itemPrice}>

@@ -54,17 +54,17 @@ function RootLayoutNav() {
           <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
           <Stack.Screen name='modal' options={{ presentation: 'modal' }} />
           
-          <Stack.Screen name='productCategory/create' options={{ title: 'Crear categoría de producto', presentation: 'formSheet', headerTitleAlign: 'center' }} />
-          <Stack.Screen name='productCategory/[productCategoryId]' options={{ title: 'Categoría de producto', presentation: 'card', headerTitleAlign: 'center' }} />
-          <Stack.Screen name='productCategory/edit/[productCategoryId]' options={{ title: 'Editar categoría de producto', presentation: 'card', headerTitleAlign: 'center' }} />
+          {/* <Stack.Screen name='productCategory/create' options={{ title: 'Crear categoría de producto', presentation: 'formSheet', headerTitleAlign: 'center' }} />
+          <Stack.Screen name='productCategory/[productCategoryId]' options={{ title: 'Categoría de producto', presentation: 'card', headerTitleAlign: 'center' }} /> 
+          <Stack.Screen name='productCategory/edit/[productCategoryId]' options={{ title: 'Editar categoría de producto', presentation: 'card', headerTitleAlign: 'center' }} /> */}
 
-          <Stack.Screen name='product/create' options={{ title: 'Crear producto', presentation: 'formSheet', headerTitleAlign: 'center' }} />
+          {/* <Stack.Screen name='product/create' options={{ title: 'Crear producto', presentation: 'formSheet', headerTitleAlign: 'center' }} />
           <Stack.Screen name='product/[productId]' options={{ title: 'Producto', presentation: 'card', headerTitleAlign: 'center' }} />
-          <Stack.Screen name='product/edit/[productId]' options={{ title: 'Editar producto', presentation: 'card', headerTitleAlign: 'center' }} />
+          <Stack.Screen name='product/edit/[productId]' options={{ title: 'Editar producto', presentation: 'card', headerTitleAlign: 'center' }} /> */}
 
-          <Stack.Screen name='discount/create' options={{ title: 'Crear descuento', presentation: 'formSheet', headerTitleAlign: 'center' }} />
+          {/* <Stack.Screen name='discount/create' options={{ title: 'Crear descuento', presentation: 'formSheet', headerTitleAlign: 'center' }} />
           <Stack.Screen name='discount/[discountId]' options={{ title: 'Descuento', presentation: 'card', headerTitleAlign: 'center' }} />
-          <Stack.Screen name='discount/edit/[discountId]' options={{ title: 'Editar descuento', presentation: 'card', headerTitleAlign: 'center' }} />
+          <Stack.Screen name='discount/edit/[discountId]' options={{ title: 'Editar descuento', presentation: 'card', headerTitleAlign: 'center' }} /> */}
 
           <Stack.Screen name='user/login' options={{ title: 'Iniciar sesión', presentation: 'modal', headerTitleAlign: 'center' }} />
           <Stack.Screen name='user/create' options={{ title: 'Crear cuenta', presentation: 'formSheet', headerTitleAlign: 'center' }} />

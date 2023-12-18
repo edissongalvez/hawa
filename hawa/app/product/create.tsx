@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
-import { Image, StyleSheet } from 'react-native'
+import { Image, Pressable, StyleSheet } from 'react-native'
 import * as ImagePicker from 'expo-image-picker'
-import { Body, Box, Button, Picker, PickerItem, ScrollView, Separator, TextField } from '../../components/Themed'
+import { Body, Box, Button, Picker, PickerItem, ScrollView, Separator, TextField, Text, TrailingButton} from '../../components/Themed'
 import ProductCategoryController, { ProductCategory } from '../../classes/productCategory'
 import DiscountController, { Discount } from '../../classes/discount'
-import { router } from 'expo-router'
+import { Stack, router } from 'expo-router'
 import { Notify } from '../../components/Window'
 import axios from 'axios'
 import Url from '../../constants/Url'
@@ -82,36 +82,40 @@ export default function CreateProductScreen() {
     }
  
     return (
-        <Body>
-            <Box header='PRODUCTO' footer='Identifica y presenta tu producto de manera clara y atractiva.'>
-                <Image source={image ? { uri: image.uri } : require('../../assets/images/icon.png') } style={styles.image} />
-                <Button action={data.image ? 'Cambiar imagen' : 'Seleccionar imagen'} onPress={pickImage} secondary/>
-                <Separator />
-                <TextField placeholder='Ingrese nombre' value={data.name} onChangeText={handleChange('name')} />
-                <Separator />
-                <TextField placeholder='Ingrese descripción' value={data.desc} onChangeText={handleChange('desc')} />
-                <Separator />
-                <TextField placeholder='Ingrese precio' inputMode='decimal' value={data.price > 0 ? data.price.toString() : ''} onChangeText={handleChange('price', true)} />
-            </Box>
-            <Box header='INVENTARIO' footer='Maneja la disponibilidad física del producto en el inventario.'>
-                <TextField placeholder='Ingrese cantidad' inputMode='numeric' value={data.quantity > 0 ? data.quantity.toString() : ''} onChangeText={handleChange('quantity', true)} />
-            </Box>
-            <Box header='CATEGORÍA' footer='Facilita la búsqueda y navegación organizando productos en categorías.'>
-                <Picker selectedValue={data.categoryId} onValueChange={(selectedValue: unknown) => handleChange('categoryId', true)(selectedValue as string)}>
-                    {categories?.map((category) => (
-                        <PickerItem label={category.name} value={category.id} key={category.id} />
-                    ))}
-                </Picker>
-            </Box>
-            <Box header='DESCUENTO' footer='Aplica descuentos especiales al producto si es necesario.'>
-                <Picker selectedValue={data.discountId} onValueChange={(selectedValue: unknown) => handleChange('discountId', true)(selectedValue as string)}>
-                    {discounts?.map((discount) => (
-                        <PickerItem label={discount.name} value={discount.id} key={discount.id} />
-                    ))}
-                </Picker>
-            </Box>
-            <Button action='Guardar' onPress={handleSubmit} />
-        </Body>
+        <>
+            <Stack.Screen options={{ title: 'Crear producto', presentation: 'formSheet', headerTitleAlign: 'center', headerRight: () => <TrailingButton onPress={handleSubmit} label='Guardar' /> }} />
+            <Body>
+                <Box header='PRODUCTO' footer='Identifica y presenta tu producto de manera clara y atractiva.'>
+                    <Image source={image ? { uri: image.uri } : require('../../assets/images/icon.png') } style={styles.image} />
+                    <Button action={data.image ? 'Cambiar imagen' : 'Seleccionar imagen'} onPress={pickImage} secondary/>
+                    <Separator />
+                    <TextField placeholder='Ingrese nombre' value={data.name} onChangeText={handleChange('name')} />
+                    <Separator />
+                    <TextField placeholder='Ingrese descripción' value={data.desc} onChangeText={handleChange('desc')} />
+                    <Separator />
+                    <TextField placeholder='Ingrese precio' inputMode='decimal' value={data.price > 0 ? data.price.toString() : ''} onChangeText={handleChange('price', true)} />
+                </Box>
+                <Box header='INVENTARIO' footer='Maneja la disponibilidad física del producto en el inventario.'>
+                    <TextField placeholder='Ingrese cantidad' inputMode='numeric' value={data.quantity > 0 ? data.quantity.toString() : ''} onChangeText={handleChange('quantity', true)} />
+                </Box>
+                <Box header='CATEGORÍA' footer='Facilita la búsqueda y navegación organizando productos en categorías.'>
+                    <Picker selectedValue={data.categoryId} onValueChange={(selectedValue: unknown) => handleChange('categoryId', true)(selectedValue as string)}>
+                        {categories?.map((category) => (
+                            <PickerItem label={category.name} value={category.id} key={category.id} />
+                        ))}
+                    </Picker>
+                </Box>
+                <Box header='DESCUENTO' footer='Aplica descuentos especiales al producto si es necesario.'>
+                    <Picker selectedValue={data.discountId} onValueChange={(selectedValue: unknown) => handleChange('discountId', true)(selectedValue as string)}>
+                        {discounts?.map((discount) => (
+                            <PickerItem label={discount.name} value={discount.id} key={discount.id} />
+                        ))}
+                    </Picker>
+                </Box>
+                {/* <Button action='Guardar' onPress={handleSubmit} /> */}
+            </Body>
+        </>
+        
     )
 }
 

@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import { Alert, Platform, StyleSheet } from 'react-native'
 import { StatusBar } from 'expo-status-bar'
-import { router, useLocalSearchParams } from 'expo-router'
+import { Stack, router, useLocalSearchParams } from 'expo-router'
 
-import { Body, Box, Button, ScrollView, Separator, TextField } from '../../../components/Themed'
+import { Body, Box, Button, Separator, TextField, TrailingButton } from '../../../components/Themed'
 import ProductCategoryController from '../../../classes/productCategory'
 import { Notify } from '../../../components/Window'
 
@@ -38,16 +38,19 @@ export default function EditProductCategoryScreen() {
     }
 
     return (
-        <Body>
-            <Box footer='Una vez editada la categoría, podrás agregar productos cuando crees o edites productos.'>
-                <TextField placeholder='Ingrese nombre' value={data.name} onChangeText={handleChange('name')} />
-                <Separator />
-                <TextField placeholder='Ingrese descripción' value={data.desc} onChangeText={handleChange('desc')} multiline={true} numberOfLines={1} />
-            </Box>
-            <Button action='Actualizar' onPress={handleSubmit} />
+        <>
+            <Stack.Screen options={{ title: 'Editar categoría', presentation: 'card', headerTitleAlign: 'center', headerRight: () => <TrailingButton onPress={handleSubmit} label='Actualizar' /> }} />
+            <Body>
+                <Box footer='Una vez editada la categoría, podrás agregar productos cuando crees o edites productos.'>
+                    <TextField placeholder='Ingrese nombre' value={data.name} onChangeText={handleChange('name')} />
+                    <Separator />
+                    <TextField placeholder='Ingrese descripción' value={data.desc} onChangeText={handleChange('desc')} multiline={true} numberOfLines={1} />
+                </Box>
+                {/* <Button action='Actualizar' onPress={handleSubmit} /> */}
 
-            <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
-        </Body>
+                <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
+            </Body>
+        </>
     )
 }
 

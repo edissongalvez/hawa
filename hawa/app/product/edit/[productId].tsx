@@ -1,12 +1,12 @@
-import { router, useLocalSearchParams } from 'expo-router'
+import { Stack, router, useLocalSearchParams } from 'expo-router'
 import { useEffect, useState } from 'react'
 import { Image, StyleSheet } from 'react-native'
 import * as ImagePicker from 'expo-image-picker'
 import ProductController, { Product } from '../../../classes/product'
-import { Body, Box, Button, Picker, PickerItem, ScrollView, Separator, Text, TextField } from '../../../components/Themed'
+import { Body, Box, Button, Picker, PickerItem, ScrollView, Separator, Text, TextField, Trailing, TrailingButton } from '../../../components/Themed'
 import ProductCategoryController, { ProductCategory } from '../../../classes/productCategory'
 import DiscountController, { Discount } from '../../../classes/discount'
-import { Notify } from '../../../components/Window'
+import { Confirm, Notify } from '../../../components/Window'
 import axios from 'axios'
 import Url from '../../../constants/Url'
 
@@ -57,6 +57,10 @@ export default function EditProductScreen() {
         }
     }
 
+    const handleDelete = () => {
+        Confirm({ title: '¿Confirma eliminar el producto?', desc: 'Esta acción no se puede deshacer', action: () => {ProductController.deleteProduct(Number(productId)), Notify({ title: 'Producto eliminado', desc: 'Orden actualizado' }), router.replace('/')} })
+    }
+
     const handleSubmit = async () => {
         try {
             const formData = new FormData()
@@ -89,6 +93,8 @@ export default function EditProductScreen() {
     }
 
     return (
+        <>
+        <Stack.Screen options={{ title: 'Editar producto', presentation: 'card', headerTitleAlign: 'center', headerRight: () => <Trailing><TrailingButton onPress={handleDelete} label='Eliminar' /><TrailingButton onPress={handleSubmit} label='Actualizar' /></Trailing> }} />
         <Body>
             { data ? (
                 <>
@@ -119,12 +125,13 @@ export default function EditProductScreen() {
                             ))}
                         </Picker>
                     </Box>
-                    <Button action='Actualizar' onPress={handleSubmit} />
+                    {/* <Button action='Actualizar' onPress={handleSubmit} /> */}
                 </>
             ) : (
                 <Text>Cargando...</Text>
             ) }
         </Body>
+        </>
     )
 }
 

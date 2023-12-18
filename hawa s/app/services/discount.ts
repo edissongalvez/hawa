@@ -1,5 +1,4 @@
 import { PrismaClient, Product } from '@prisma/client'
-import { updateProduct } from './product'
 
 const prisma = new PrismaClient()
 

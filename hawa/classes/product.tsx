@@ -4,6 +4,8 @@ import { ProductCategory } from './productCategory'
 import { ProductInventory } from "./productInventory"
 
 import Url from '../constants/Url'
+import { CartItem } from './cartItem'
+import { OrderItem } from './orderItem'
 
 export interface Product {
     id: number,
@@ -19,7 +21,9 @@ export interface Product {
     deletedAt: Date,
     category: ProductCategory,
     inventory: ProductInventory,
-    discount: Discount
+    discount: Discount,
+    cartItems: CartItem[],
+    orderItems: OrderItem[]
 }
 
 export default class ProductController {
@@ -39,7 +43,7 @@ export default class ProductController {
     }
 
     static async updateProduct(id: number, name: string, desc: string, image: string, categoryId: number, quantity: number, price: number, discountId?: number): Promise<Product> {
-        const response = await axios.put(`${Url.api}/product/${id}`, { name, desc, image, categoryId, quantity, price, discountId })
+        const response = await axios.put(`${Url.api}/product/${id}`, { id, name, desc, image, categoryId, quantity, price, discountId })
         return response.data
     }
 
