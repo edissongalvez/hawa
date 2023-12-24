@@ -4,7 +4,7 @@ import * as bcrypt from 'bcrypt'
 const prisma = new PrismaClient()
 
 export const login = async (username: string, password: string) => {
-    const user = await prisma.user.findUnique({ where: { username }, include: { addresses: true, payments: true } })
+    const user = await prisma.user.findUnique({ where: { username }, include: { addresses: true, payments: true, session: { include: { cartItems: { include: { product: { include: { discount: true } } } } } } } })
 
     if (user && bcrypt.compareSync(password, user.password)) {
         return user
@@ -29,7 +29,8 @@ export const getUsers = async () => {
     return await prisma.user.findMany({
         include: {
             addresses: true,
-            payments: true
+            payments: true,
+            session: true
         }
     })
 }
@@ -41,7 +42,8 @@ export const getUser = async (id: number) => {
         },
         include: {
             addresses: true,
-            payments: true
+            payments: true,
+            session: true
         }
     })
 }

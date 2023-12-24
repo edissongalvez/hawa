@@ -1,7 +1,4 @@
 import axios from 'axios'
-
-import Url from '../constants/Url'
-import { useUser } from '../context/UserContext'
 import { UserAddress } from './userAddress'
 import { UserPayment } from './userPayment'
 import { ShoppingSession } from './shoppingSession'
@@ -25,32 +22,32 @@ export interface User {
 
 export default class UserController {
     static async login(username: string, password: string): Promise<User> {
-        const response = await axios.post<User>(`${Url.api}/user/login`, { username, password })
+        const response = await axios.post<User>(`${process.env.EXPO_PUBLIC_API_URL}/user/login`, { username, password })
         const user = response.data
         return user
     }
 
     static async createUser(username: string, password: string, image: string, firstName: string, lastName: string): Promise<User> {
-        const response = await axios.post<User>(`${Url.api}/user`, { username, password, image, firstName, lastName })
+        const response = await axios.post<User>(`${process.env.EXPO_PUBLIC_API_URL}/user`, { username, password, image, firstName, lastName })
         return response.data
     }
 
     static async getUsers(): Promise<User[]> {
-        const response = await axios.get<User[]>(`${Url.api}/user`)
+        const response = await axios.get<User[]>(`${process.env.EXPO_PUBLIC_API_URL}/user`)
         return response.data
     }
 
     static async getUser(id: number): Promise<User> {
-        const response = await axios.get<User>(`${Url.api}/user/${id}`)
+        const response = await axios.get<User>(`${process.env.EXPO_PUBLIC_API_URL}/user/${id}`)
         return response.data
     }
 
     static async updateUser(id: number, username: string, password: string, image: string, firstName: string, lastName: string): Promise<User> {
-        const response = await axios.put<User>(`${Url.api}/user/${id}`, {username, password, image, firstName, lastName})
+        const response = await axios.put<User>(`${process.env.EXPO_PUBLIC_API_URL}/user/${id}`, {username, password, image, firstName, lastName})
         return response.data
     }
 
     static async deleteUser(id: number): Promise<void> {
-        await axios.delete(`${Url.api}/user/${id}`)
+        await axios.delete(`${process.env.EXPO_PUBLIC_API_URL}/user/${id}`)
     }
 }

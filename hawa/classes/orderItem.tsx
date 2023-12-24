@@ -1,6 +1,5 @@
 import axios from 'axios'
 
-import Url from '../constants/Url'
 import { OrderDetail } from './orderDetail'
 import { Product } from './product'
 
@@ -17,26 +16,26 @@ export interface OrderItem {
 
 export default class OrderItemController {
     static async createOrderItem(orderId: number, productId: number, quantity: number): Promise<OrderItem> {
-        const response = await axios.post<OrderItem>(`${Url.api}/orderItem`, { orderId, productId, quantity })
+        const response = await axios.post<OrderItem>(`${process.env.EXPO_PUBLIC_API_URL}/orderItem`, { orderId, productId, quantity })
         return response.data
     }
 
     static async getOrderItems(): Promise<OrderItem[]> {
-        const response = await axios.get<OrderItem[]>(`${Url.api}/orderItem`)
+        const response = await axios.get<OrderItem[]>(`${process.env.EXPO_PUBLIC_API_URL}/orderItem`)
         return response.data
     }
 
     static async getOrderItem(id: number): Promise<OrderItem> {
-        const response = await axios.get<OrderItem>(`${Url.api}/orderItem/${id}`)
+        const response = await axios.get<OrderItem>(`${process.env.EXPO_PUBLIC_API_URL}/orderItem/${id}`)
         return response.data
     }
 
     static async updateOrderItem(id: number, orderId: number, productId: number, quantity: number): Promise<OrderItem> {
-        const response = await axios.put<OrderItem>(`${Url.api}/orderItem/${id}`, { orderId, productId, quantity })
+        const response = await axios.put<OrderItem>(`${process.env.EXPO_PUBLIC_API_URL}/orderItem/${id}`, { orderId, productId, quantity })
         return response.data
     }
 
     static async deleteOrderItem(id: number): Promise<void> {
-        await axios.delete(`${Url.api}/orderItem/${id}`)
+        await axios.delete(`${process.env.EXPO_PUBLIC_API_URL}/orderItem/${id}`)
     }
 }

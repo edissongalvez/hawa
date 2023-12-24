@@ -7,7 +7,6 @@ import DiscountController, { Discount } from '../../classes/discount'
 import { Stack, router } from 'expo-router'
 import { Notify } from '../../components/Window'
 import axios from 'axios'
-import Url from '../../constants/Url'
 
 export default function CreateProductScreen() {
     const [categories, setCategories] = useState<ProductCategory[]>()
@@ -72,7 +71,7 @@ export default function CreateProductScreen() {
             formData.append('price', data.price.toString())
             formData.append('discountId', data.discountId.toString())
 
-            await axios.post(`${Url.api}/product`, formData, { headers: { 'Content-Type': 'multipart/form-data' } })
+            await axios.post(`${process.env.EXPO_PUBLIC_API_URL}/product`, formData, { headers: { 'Content-Type': 'multipart/form-data' } })
 
             Notify({ title: 'Producto registrado', desc: 'Orden actualizado' })
             router.replace('/')

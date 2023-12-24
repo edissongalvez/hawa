@@ -80,6 +80,44 @@ export const updateProduct = async (id: number, name: string, desc: string, imag
     })
 }
 
+export const incrementProductInventoryQuantity = async (id: number, quantity: number) => {
+    return await prisma.product.update({
+        where: {
+            id
+        },
+        data: {
+            inventory: {
+                update: {
+                    data: {
+                        quantity: {
+                            increment: quantity
+                        }
+                    }
+                }
+            }
+        }
+    })
+}
+
+export const decrementProductInventoryQuantity = async (id: number, quantity: number) => {
+    return await prisma.product.update({
+        where: {
+            id
+        },
+        data: {
+            inventory: {
+                update: {
+                    data: {
+                        quantity: {
+                            decrement: quantity
+                        }
+                    }
+                }
+            }
+        }
+    })
+}
+
 export const deleteProduct = async (id: number) => {
     return await prisma.product.delete({
         where: {

@@ -1,4 +1,4 @@
-import { createContext, useEffect, useContext, useState, ReactNode } from 'react'
+import { createContext, ReactNode, useContext, useEffect, useState } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { User } from '../classes/user'
 
@@ -16,20 +16,34 @@ const UserContext = createContext<UserContextProps | undefined>(undefined)
 export const UserProvider = ({ children }: UserProviderProps) => {
     const [user, setUser] = useState<User | null>(null)
 
-    useEffect(() => {
-        const loadAndSaveUser = async () => {
-            try {
-                const storedUser = await AsyncStorage.getItem('user')
-                if (storedUser) {
-                    setUser(JSON.parse(storedUser))
-                }
-            } catch (error) {
-                console.error('Hawa no puede recordar al usuario')
-            }
+    const loadUser = async () => {
+        try {
+            const storedUser = await AsyncStorage.getItem('user')
+            setUser(storedUser ? JSON.parse(storedUser) : null)
+        } catch (error) {
+            console.error('Error de AsyncStorage', error)
         }
+    }
 
-        loadAndSaveUser()
+    const saveUser = async () => {
+        try {
+            if (user) {
+                await AsyncStorage.setItem('user', JSON.stringify(user))
+            } else {
+                await AsyncStorage.removeItem('user')
+            }
+        } catch (error) {
+            console.error('Hawa no puede recordar el usuario', error)
+        }
+    }
+
+    useEffect(() => {
+        loadUser()
     }, [])
+
+    useEffect(()=> {
+        saveUser()
+    }, [user])
 
     return (
         <UserContext.Provider value={{ user, setUser }}>

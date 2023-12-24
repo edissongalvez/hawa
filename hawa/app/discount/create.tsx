@@ -4,7 +4,6 @@ import { Body, Box, Button, Picker, PickerItem, ScrollView, Separator, Text, Tex
 import ProductController, { Product } from '../../classes/product'
 import { Notify } from '../../components/Window'
 import DiscountController from '../../classes/discount'
-import Url from '../../constants/Url'
 import { Stack, router } from 'expo-router'
 
 export default function CreateDiscountScreen() {
@@ -70,7 +69,7 @@ export default function CreateDiscountScreen() {
                         <View key={product.id}>
                             <View style={styles.listItem}>
                                 <View style={styles.itemProd}>
-                                    <Image style={styles.image} source={{ uri: `${Url.api}/${product.image.replace(/\\/g, '/')}` }} />
+                                    <Image style={styles.image} source={{ uri: `${process.env.EXPO_PUBLIC_API_URL}/${product.image.replace(/\\/g, '/')}` }} />
                                     <View>
                                         <Text>{product.name}</Text>
                                         {product.discountId > 1 ? <Text style={styles.desc} tint>Con descuento</Text> : <Text style={styles.desc} secondary>Sin descuento</Text>}

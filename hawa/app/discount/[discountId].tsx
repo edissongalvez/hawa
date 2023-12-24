@@ -3,8 +3,7 @@ import { Image, StyleSheet, View } from 'react-native'
 import { Link, Stack, router, useLocalSearchParams } from 'expo-router'
 
 import DiscountController, { Discount } from '../../classes/discount'
-import { Body, Button, Text, Trailing, TrailingButton } from '../../components/Themed'
-import Url from '../../constants/Url'
+import { Body, Button, Text, TrailingButton } from '../../components/Themed'
 import { useUser } from '../../context/UserContext'
 
 export default function DiscountScreen() {
@@ -14,7 +13,7 @@ export default function DiscountScreen() {
 
     useEffect(() => {
       DiscountController.getDiscount(Number(discountId)).then(discount => setDiscount(discount))
-    }, [discount])
+    }, [discountId])
 
     return discount ?
         <>
@@ -32,7 +31,7 @@ export default function DiscountScreen() {
                 { discount.products.length > 0 ? discount.products.map(product => (
                     <View style={styles.itemContent} key={product.id}>
                         <View style={styles.item}>
-                            <Image source={{ uri: `${Url.api}/${product.image.replace(/\\/g, '/')}` }} style={discount.active ? styles.image : styles.imageFilter} />
+                            <Image source={{ uri: `${process.env.EXPO_PUBLIC_API_URL}/${product.image.replace(/\\/g, '/')}` }} style={discount.active ? styles.image : styles.imageFilter} />
                             <View>
                                 <Text secondary>{ product.categoryId }</Text>
                                 <Text>{ product.name }</Text>

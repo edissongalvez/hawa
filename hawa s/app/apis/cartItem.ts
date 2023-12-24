@@ -20,9 +20,30 @@ router.get('/:id', async (req, res) => {
     res.json(cartItem)
 })
 
+// getCartItemForSessionAndProduct
+router.get('/getForSessionAndProduct', async (req, res) => {
+    const { sessionId, productId } = req.body
+    const cartItem = await cartItemService.getCartItemForSessionAndProduct(Number(sessionId), Number(productId))
+    res.json(cartItem)
+})
+
 router.put('/:id', async (req, res) => {
     const {sessionId, productId, quantity} = req.body
     const cartItem = await cartItemService.updateCartItem(Number(req.params.id), Number(sessionId), Number(productId), Number(quantity))
+    res.json(cartItem)
+})
+
+//incrementCartItemQuantity
+router.put('/incrementQuantity/:id', async (req, res) => {
+    const { quantity } = req.body
+    const cartItem = await cartItemService.incrementCartItemQuantity(Number(req.params.id), Number(quantity))
+    res.json(cartItem)
+})
+
+//decrementCartItemQuantity
+router.put('/decrementQuantity/:id', async (req, res) => {
+    const { quantity } = req.body
+    const cartItem = await cartItemService.decrementCartItemQuantity(Number(req.params.id), Number(quantity))
     res.json(cartItem)
 })
 

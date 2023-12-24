@@ -1,11 +1,10 @@
 import { Image, StyleSheet, View } from 'react-native'
 
-import { Body, Box, Button, Separator, Text } from '../../components/Themed'
+import { Body, Box, Button, Icon, Separator, Text } from '../../components/Themed'
 import { useUser } from '../../context/UserContext'
 import { Link, router } from 'expo-router'
 import { BoxItem } from '../../components/List'
 import Header from '../../components/Header'
-import Url from '../../constants/Url'
 
 export default function TabThreeScreen() {
     const { user } = useUser()
@@ -13,7 +12,7 @@ export default function TabThreeScreen() {
     return user ? 
         <Body>
             <Header title={`Hola, ${user.firstName} ${user.lastName}`} />
-            <Image style={styles.image} source={ user.image ? { uri: `${Url.api}/${user.image.replace(/\\/g, '/')}`} : require('../../assets/images/icon.png') } />
+            <Image style={styles.image} source={ user.image ? { uri: `${process.env.EXPO_PUBLIC_API_URL}/${user.image.replace(/\\/g, '/')}`} : require('../../assets/images/icon.png') } />
             <Box>
                 <BoxItem name='Usuario' value={user.username} />
                 <Separator />
@@ -35,6 +34,7 @@ export default function TabThreeScreen() {
         </Body>
     :
         <Body center>
+            <Icon name='person-circle-outline' />
             <Text style={styles.textLogin}>Para usar la aplicación Bambino, <Link href={'/user/login'}><Text tint>inicie sesión</Text></Link>.</Text>
         </Body>
             

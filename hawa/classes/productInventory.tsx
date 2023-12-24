@@ -1,8 +1,6 @@
 import axios from 'axios'
 import { Product } from './product'
 
-import Url from '../constants/Url'
-
 export interface ProductInventory {
     id: number,
     quantity: number,
@@ -14,26 +12,26 @@ export interface ProductInventory {
 
 export default class ProductInventoryController {
     static async createProductInventory(quantity: number): Promise<ProductInventory> {
-        const response = await axios.post<ProductInventory>(`${Url.api}/productInventory`, { quantity })
+        const response = await axios.post<ProductInventory>(`${process.env.EXPO_PUBLIC_API_URL}/productInventory`, { quantity })
         return response.data
     }
 
     static async getProductInventories(): Promise<ProductInventory[]> {
-        const response = await axios.get<ProductInventory[]>(`${Url.api}/productInventory`)
+        const response = await axios.get<ProductInventory[]>(`${process.env.EXPO_PUBLIC_API_URL}/productInventory`)
         return response.data
     }
 
     static async getProductInventory(id: number): Promise<ProductInventory> {
-        const response = await axios.get<ProductInventory>(`${Url.api}/productInventory/${id}`)
+        const response = await axios.get<ProductInventory>(`${process.env.EXPO_PUBLIC_API_URL}/productInventory/${id}`)
         return response.data
     }
 
     static async updateProductInventory(id: number, quantity: number): Promise<ProductInventory> {
-        const response = await axios.put<ProductInventory>(`${Url.api}/productInventory/${id}`, { quantity })
+        const response = await axios.put<ProductInventory>(`${process.env.EXPO_PUBLIC_API_URL}/productInventory/${id}`, { quantity })
         return response.data
     }
 
     static async deleteProductInventory(id: number): Promise<void> {
-        await axios.delete(`${Url.api}/productInventory/${id}`)
+        await axios.delete(`${process.env.EXPO_PUBLIC_API_URL}/productInventory/${id}`)
     }
 }

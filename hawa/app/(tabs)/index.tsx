@@ -10,7 +10,7 @@ export default function TabOneScreen() {
 
   useEffect(() => {
     ProductCategoryController.getProductCategories().then(productCategories => setProductCategories(productCategories))
-  }, [productCategories])
+  }, [])
 
   return (
     <Body>

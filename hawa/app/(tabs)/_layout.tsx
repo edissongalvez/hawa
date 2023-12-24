@@ -7,9 +7,6 @@ import Colors from '../../constants/Colors'
 import { useUser } from '../../context/UserContext'
 import { Notify } from '../../components/Window'
 import { BlurView } from 'expo-blur'
-import AsyncStorage from '@react-native-async-storage/async-storage'
-
-
 
 /**
  * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/

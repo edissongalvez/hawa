@@ -4,8 +4,7 @@ import ProductController, { Product } from '../../../classes/product'
 import { Stack, router, useLocalSearchParams } from 'expo-router'
 import { Confirm, Notify } from '../../../components/Window'
 import DiscountController from '../../../classes/discount'
-import { Body, Box, Button, Picker, PickerItem, ScrollView, Separator, Text, TextField, Toggle, Trailing, TrailingButton } from '../../../components/Themed'
-import Url from '../../../constants/Url'
+import { Body, Box, Picker, PickerItem, Separator, Text, TextField, Toggle, Trailing, TrailingButton } from '../../../components/Themed'
 
 export default function EditDiscountScreen() {
     const { discountId } = useLocalSearchParams<{ discountId: string }>()
@@ -76,7 +75,7 @@ export default function EditDiscountScreen() {
                         <View key={product.id}>
                             <View style={styles.listItem} >
                                 <View style={styles.itemProd}>
-                                    <Image style={styles.image} source={{ uri: `${Url.api}/${product.image.replace(/\\/g, '/')}` }} />
+                                    <Image style={styles.image} source={{ uri: `${process.env.EXPO_PUBLIC_API_URL}/${product.image.replace(/\\/g, '/')}` }} />
                                     <View>
                                         <Text>{product.name}</Text>
                                         {product.discountId > 1 ? <Text style={styles.desc} tint>{product.discountId === Number(discountId) ? 'Con este descuento' : 'Con otro descuento'}</Text> : <Text style={styles.desc} secondary>Sin descuento</Text>}

@@ -14,7 +14,7 @@ export default function CategoryScreen() {
 
     useEffect(() => {
         ProductCategoryController.getProductCategory(Number(productCategoryId)).then(productCategory => setProductCategory(productCategory))
-    }, [productCategory])
+    }, [productCategoryId])
 
     return productCategory ?
         <>

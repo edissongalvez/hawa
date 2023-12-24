@@ -2,65 +2,40 @@ import { useEffect, useState } from 'react'
 import { ImageBackground, StyleSheet, View } from 'react-native'
 import { Link, Stack, router, useLocalSearchParams } from 'expo-router'
 
-import { Body, Box, Button, ScrollView, Separator, Text, TextField, Trailing, TrailingButton } from '../../components/Themed'
+import { Body, Box, Button, Icon, Separator, Text, TextField, TrailingButton } from '../../components/Themed'
 import ProductController, { Product } from '../../classes/product'
-import Url from '../../constants/Url'
-import { Confirm, Notify } from '../../components/Window'
+import { Notify } from '../../components/Window'
 import { useUser } from '../../context/UserContext'
 import ShoppingSessionController, { ShoppingSession } from '../../classes/shoppingSession'
 import CartItemController from '../../classes/cartItem'
 
-
 export default function ProductScreen() {
-    const { user } = useUser()
+    const { user, setUser } = useUser()
     const { productId } = useLocalSearchParams<{ productId: string }>()
     const [product, setProduct] = useState<Product>()
-    const [shoppingSession, setShoppingSession] = useState<ShoppingSession>()
 
     const [quantity, setQuantity] = useState<number>(0)
 
     useEffect(() => {
         ProductController.getProduct(Number(productId)).then(product => setProduct(product))
-        if (user) ShoppingSessionController.getShoppingSessionForUser(user.id).then(shoppingSession => setShoppingSession(shoppingSession))
-    }, [product])
+    }, [user, productId])
 
     const handleSubmit = async () => {
         try {
-            if (product && user && product.inventory.quantity >= quantity) {
-                if (!user.session) {
-                    await ShoppingSessionController.createShoppingSession(Number(user.id), 0);
+            if (user && quantity > 0) {
+                let createdSession = user.session
+                if (!createdSession) {
+                    createdSession = await ShoppingSessionController.createShoppingSession(user.id)
+                    setUser({...user, session: createdSession})
                 }
+                await CartItemController.createCartItem(createdSession.id, Number(productId), quantity)
+                Notify({ title: 'Añadido al carrito', desc: 'Carrito actualizado' })
 
-                const productId = Number(product.id);
-
-                if (shoppingSession) {
-                    const existingCartItem = shoppingSession.cartItems.find(cartItem => cartItem.productId = productId);
-          
-                    if (existingCartItem) {
-                        await CartItemController.updateCartItem(existingCartItem.id, shoppingSession.id, productId, existingCartItem.quantity + quantity)
-                    } else {
-                        await CartItemController.createCartItem(shoppingSession.id, productId, quantity)
-                    }
-                }
-          
-                await ProductController.updateProduct(
-                    productId,
-                    product.name,
-                    product.desc,
-                    product.image,
-                    product.categoryId,
-                    product.inventory.quantity - quantity,
-                    product.price,
-                    product.discountId
-                )
-          
-                Notify({ title: 'Producto añadido al carrito', desc: 'Carrito actualizado' })
-            } else {
-                Notify({ title: 'Sin existencias disponibles', desc: 'Revise la cantidad' })
+                const updatedSession = await ShoppingSessionController.getShoppingSessionForUser(user.id)
+                setUser({ ...user, session: updatedSession })
             }
         } catch (error) {
             Notify({ title: 'Error al añadir al carrito', desc: 'Intente nuevamente' })
-            console.log(error)
         }
     }
 
@@ -68,7 +43,7 @@ export default function ProductScreen() {
         <>
             <Stack.Screen options={{ title: 'Producto', presentation: 'formSheet', headerTitleAlign: 'center', headerRight: () => user?.adminUser ? <TrailingButton onPress={() => router.push(`/product/edit/${product.id}`)} label='Editar' /> : null }} /> 
             <Body>
-                <ImageBackground source={product.image === '/files/undefined' ? require('../../assets/images/icon.png') : { uri: `${Url.api}/${product.image.replace(/\\/g, '/')}` } } resizeMode='cover' style={styles.imageBackground} imageStyle={styles.image}>
+                <ImageBackground source={product.image === '/files/undefined' ? require('../../assets/images/icon.png') : { uri: `${process.env.EXPO_PUBLIC_API_URL}/${product.image.replace(/\\/g, '/')}` } } resizeMode='cover' style={styles.imageBackground} imageStyle={styles.image}>
                     <View style={styles.card}>
                         <Text style={{color: 'white', fontSize: 13}}>{product.category.name.toUpperCase()}</Text>
                         <Text style={{color: 'white', fontWeight: 'bold'}}>{product.name}</Text>
@@ -93,9 +68,12 @@ export default function ProductScreen() {
                 </Box>
                 {user ? <Box>
                         <TextField placeholder='Cantidad' inputMode='numeric' value={quantity.toString()} onChangeText={value => setQuantity(Number(value))} />
-                        <Button action='Comprar' onPress={handleSubmit} />
+                        <Button action='Agregar al carrito' onPress={handleSubmit} />
                     </Box> 
-                : <Text style={styles.textNull} secondary>Para realizar compras, inicie sesión.</Text>}
+                : <>
+                    <Icon name='person-circle-outline' />
+                    <Text style={styles.textNull}>Para realizar compras, <Link href={'/user/login'}><Text tint>inicie sesión</Text></Link>.</Text>
+                </>}
             </Body>
         </> ) : (
             <Text>Cargando...</Text>

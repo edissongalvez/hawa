@@ -7,6 +7,7 @@ import React from 'react'
 import { StyleSheet, Text as DefaultText, useColorScheme, View as DefaultView, ScrollView as DefaultScrollView, Pressable as DefaultPressable, TextInput as DefaultTextInput, Pressable } from 'react-native'
 import { Picker as DefaultPicker } from '@react-native-picker/picker'
 import Checkbox from 'expo-checkbox'
+import { Ionicons as DefaultIonicons } from '@expo/vector-icons'
 
 import Colors from '../constants/Colors'
 
@@ -23,6 +24,7 @@ export type TextFieldProps = ThemeProps & DefaultTextInput['props']
 export type PickerProps = ThemeProps & React.ComponentProps<typeof DefaultPicker>
 export type PickerItemProps = ThemeProps & React.ComponentProps<typeof DefaultPicker.Item>
 export type ToggleProps = ThemeProps & Checkbox['props']
+export type IoniconsProps = ThemeProps & React.ComponentProps<typeof DefaultIonicons>
 
 export function useThemeColor(
   props: { light?: string; dark?: string },
@@ -61,6 +63,14 @@ export function View(props: ViewProps) {
   const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'background');
 
   return <DefaultView style={[{ backgroundColor }, style]} {...otherProps} />;
+}
+
+export function Icon({ secondary, ...props }: IoniconsProps & { secondary?: boolean }) {
+  const { style, lightColor, darkColor, ...otherProps } = props
+  const color = useThemeColor({ light: lightColor, dark: darkColor }, 'text')
+  const colorSecondary = useThemeColor({ light: lightColor, dark: darkColor }, 'textSecondary')
+  
+  return <DefaultIonicons size={54} color={secondary ? colorSecondary : color} style={{ alignSelf: 'center' }} {...otherProps} />
 }
 
 export function Box({ children, header, footer, ...props }: ViewProps & { header?: string, footer?: string } ) {

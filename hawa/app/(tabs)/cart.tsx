@@ -1,55 +1,57 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Image, StyleSheet, View } from 'react-native'
-import { Body, Button, Separator, Text } from '../../components/Themed'
+import { Body, Button, Icon, Separator, Text } from '../../components/Themed'
 import ShoppingSessionController, { ShoppingSession } from '../../classes/shoppingSession'
 import { useUser } from '../../context/UserContext'
 import { Notify } from '../../components/Window'
 import CartItemController from '../../classes/cartItem'
-import ProductController from '../../classes/product'
-import Url from '../../constants/Url'
+import { Ionicons } from '@expo/vector-icons'
 
 export default function TabThreeScreen() {
-    const { user } = useUser()
+    const { user, setUser } = useUser()
+    const sessionRef = useRef(user?.session)
 
     const [shoppingSession, setShoppingSession] = useState<ShoppingSession>()
-    const [total, setTotal] = useState<number>(0)
-
-    const handleTotal = () => {
-        if (shoppingSession && shoppingSession.cartItems) {
-            const sumaDePrecios = shoppingSession.cartItems.reduce((acumulador, cartItem) => acumulador + (cartItem.product.price * cartItem.productId * (1 - cartItem.product.discount.discountPercent)), 0)
-            setTotal(sumaDePrecios)
-        }
-    }
 
     useEffect(() => {
         if (user) {
-            ShoppingSessionController.getShoppingSessionForUser(user.id).then(session => setShoppingSession(session))
-            handleTotal()
+            ShoppingSessionController.getShoppingSessionForUser(user.id).then(session => {
+                if (session ! == sessionRef.current) {
+                    setUser({ ...user, session })
+                    sessionRef.current = session
+                }    
+            })
         }
-    }, [user, shoppingSession])
+    }, [user])
 
     const handleSubmit = async (id: number) => {
         try {
-            const cartItem = await CartItemController.getCartItem(id)
-            ProductController.updateProduct(cartItem.productId, cartItem.product.name, cartItem.product.desc, cartItem.product.image, cartItem.product.categoryId, cartItem.product.inventory.quantity + cartItem.quantity, cartItem.product.price, cartItem.product.discountId)
-            CartItemController.deleteCartItem(cartItem.id)
-            Notify({ title: 'Elemento quitado', desc: 'Carrito actualizado' })
+            if (user) {
+                CartItemController.deleteCartItem(id)
+                Notify({ title: 'Quitado del carrito', desc: 'Carrito actualizado' })
+
+                const updatedSession = await ShoppingSessionController.getShoppingSessionForUser(user.id)
+                setUser({ ...user, session: updatedSession })
+            } else {
+                Notify({ title: 'Sin usuario', desc: 'Inicie sesión para realizar compras' })
+            }
+            
         } catch (error) {
             Notify({ title: 'Error al quitar elemento', desc: 'Intente nuevamente' })
         }
     }
 
-    return shoppingSession && shoppingSession.cartItems ?
+    return user && user.session && user.session.cartItems.length > 0 ?
         <Body>
-            <Text style={styles.total}>S/. {total.toString()}</Text>
-            { shoppingSession.cartItems.map(cartItem => (
+            <Text style={styles.total}>S/. {user.session.total}</Text>
+            { user.session.cartItems.map(cartItem => (
                 <View style={styles.content} key={cartItem.id}>
-                    <Image style={styles.image} source={{ uri: `${Url.api}/${cartItem.product.image.replace(/\\/g, '/')}` }} />
+                    <Image style={styles.image} source={{ uri: `${process.env.EXPO_PUBLIC_API_URL}/${cartItem.product.image.replace(/\\/g, '/')}` }} />
                     <View style={styles.desc}>
                         <Text>{cartItem.product.name}</Text>
-                        <Text style={styles.textSecondary} secondary>Precio unitario: {cartItem.product.price * ( 1 - cartItem.product.discount.discountPercent)}</Text>
+                        <Text style={styles.textSecondary} secondary>Precio unitario: S/. {(cartItem.product.price * ( 1 - cartItem.product.discount.discountPercent)).toFixed(2)}</Text>
                         <Text style={styles.textSecondary} secondary>Cantidad: {cartItem.quantity}</Text>
-                        <Text style={styles.textSecondary} secondary>Subtotal: {cartItem.product.price * ( 1 - cartItem.product.discount.discountPercent) * cartItem.quantity}</Text>
+                        <Text style={styles.textSecondary} secondary>Subtotal: S/. {(cartItem.product.price * ( 1 - cartItem.product.discount.discountPercent) * cartItem.quantity).toFixed(2)}</Text>
                     </View>
                     <Button action='Quitar' onPress={() => handleSubmit(cartItem.id)} tertiary />
                 </View>
@@ -57,7 +59,8 @@ export default function TabThreeScreen() {
         </Body>
     :
         <Body center>
-            <Text secondary style={{ alignSelf: 'center' }}>Sin elementos</Text>
+            <Icon secondary name='cart-outline' />
+            <Text secondary style={{ alignSelf: 'center' }}>Sin productos</Text>
         </Body>
 }
 

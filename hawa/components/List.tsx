@@ -1,7 +1,6 @@
 import { Image, ScrollView, StyleSheet, View as ViewDefault } from 'react-native'
 
 import { Button, Text, View } from '../components/Themed'
-import Url from '../constants/Url'
 import Header from './Header'
 import { Link } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
@@ -18,7 +17,7 @@ export function HorizontalList(
                         <Link href={`/product/${item.id}`} key={item.id}>
                             <View style={styles.item}>
                                 {/* <Image style={styles.itemImage} source={{ uri: Url.api + '/' + item.image }} /> */}
-                                <Image style={styles.itemImage} source={{ uri: `${Url.api}/${item.image.replace(/\\/g, '/')}` }} />
+                                <Image style={styles.itemImage} source={{ uri: `${process.env.EXPO_PUBLIC_API_URL}/${item.image.replace(/\\/g, '/')}` }} />
                                 <Text style={styles.itemText} numberOfLines={1}>
                                     {item.name}
                                 </Text>
@@ -52,7 +51,7 @@ export function VerticalList(
                     {props.items.map((item) => (
                         <Link href={`/product/${item.id}`} key={item.id}>
                             <View style={styles.itemV}>
-                                <Image style={styles.itemImage} source={{ uri: `${Url.api}/${item.image.replace(/\\/g, '/')}` }} />
+                                <Image style={styles.itemImage} source={{ uri: `${process.env.EXPO_PUBLIC_API_URL}/${item.image.replace(/\\/g, '/')}` }} />
                                 <View style={{ flex: 1, gap: 8 }}>
                                     <View>
                                         <Text style={styles.nameText}>

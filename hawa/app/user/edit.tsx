@@ -6,7 +6,6 @@ import { Body, Box, Button, ScrollView, Separator, TextField } from '../../compo
 import { router } from 'expo-router'
 import { Notify } from '../../components/Window'
 import axios from 'axios'
-import Url from '../../constants/Url'
 import { useUser } from '../../context/UserContext'
 
 export default function CreateUserScreen() {
@@ -67,7 +66,7 @@ export default function CreateUserScreen() {
             formData.append('firstName', data.firstName)
             formData.append('lastName', data.lastName)
 
-            await axios.put(`${Url.api}/user/${user?.id}`, formData, { headers: {'Content-Type': 'multipart/form-data'} })
+            await axios.put(`${process.env.EXPO_PUBLIC_API_URL}/user/${user?.id}`, formData, { headers: {'Content-Type': 'multipart/form-data'} })
             router.push('/account')
             Notify ({ title: 'Cuenta actualizada', desc: 'Se han guardado los cambios' })
         } catch (error) {
@@ -78,7 +77,7 @@ export default function CreateUserScreen() {
     return (
         <Body center>
             <Box>
-                <Image source={image ? { uri: image.uri } : { uri: `${Url.api}/${data.image.replace(/\\/g, '/')}` } } style={styles.image} />
+                <Image source={image ? { uri: image.uri } : { uri: `${process.env.EXPO_PUBLIC_API_URL}/${data.image.replace(/\\/g, '/')}` } } style={styles.image} />
                 <Button action={data.image ? 'Cambiar foto' : 'Seleccionar foto'} onPress={pickImage} secondary/>
                 <Separator />
                 <TextField placeholder='Ingrese usuario' value={data.username} onChangeText={handleChange('username')} />

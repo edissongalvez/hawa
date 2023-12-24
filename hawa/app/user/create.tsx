@@ -6,7 +6,6 @@ import { Body, Box, Button, ScrollView, Separator, TextField } from '../../compo
 import { router } from 'expo-router'
 import { Notify } from '../../components/Window'
 import axios from 'axios'
-import Url from '../../constants/Url'
 
 export default function CreateUserScreen() {
     const [data, setData] = useState({
@@ -60,7 +59,7 @@ export default function CreateUserScreen() {
             formData.append('firstName', data.firstName)
             formData.append('lastName', data.lastName)
 
-            await axios.post(`${Url.api}/user`, formData, { headers: {'Content-Type': 'multipart/form-data'} })
+            await axios.post(`${process.env.EXPO_PUBLIC_API_URL}/user`, formData, { headers: {'Content-Type': 'multipart/form-data'} })
             router.push('/user/login')
             Notify ({ title: 'Cuenta registrada', desc: 'Inicie sesión para usar Hawa' })
         } catch (error) {

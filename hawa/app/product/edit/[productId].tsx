@@ -8,7 +8,6 @@ import ProductCategoryController, { ProductCategory } from '../../../classes/pro
 import DiscountController, { Discount } from '../../../classes/discount'
 import { Confirm, Notify } from '../../../components/Window'
 import axios from 'axios'
-import Url from '../../../constants/Url'
 
 export default function EditProductScreen() {
     const { productId } = useLocalSearchParams<{ productId: string }>()
@@ -83,7 +82,7 @@ export default function EditProductScreen() {
             formData.append('price', data.price.toString())
             formData.append('discountId', data.discountId.toString())
 
-            await axios.put(`${Url.api}/product/${productId}`, formData, { headers: { 'Content-Type': 'multipart/form-data' } })
+            await axios.put(`${process.env.EXPO_PUBLIC_API_URL}/product/${productId}`, formData, { headers: { 'Content-Type': 'multipart/form-data' } })
 
             Notify({ title: 'Producto actualizado', desc: 'Orden actualizado' })
             router.replace('/')
@@ -99,7 +98,7 @@ export default function EditProductScreen() {
             { data ? (
                 <>
                     <Box header='PRODUCTO' footer='Identifica y presenta tu producto de manera clara y atractiva.'>
-                        <Image source={image ? { uri: image.uri } : { uri: `${Url.api}/${data.image.replace(/\\/g, '/')}` } } style={styles.image} />
+                        <Image source={image ? { uri: image.uri } : { uri: `${process.env.EXPO_PUBLIC_API_URL}/${data.image.replace(/\\/g, '/')}` } } style={styles.image} />
                         <Button action={data.image ? 'Cambiar imagen' : 'Seleccionar imagen'} onPress={pickImage} secondary/>
                         <Separator />
                         <TextField placeholder='Ingrese nombre' value={data.name} onChangeText={handleChange('name')} />

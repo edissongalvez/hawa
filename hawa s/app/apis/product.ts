@@ -56,6 +56,20 @@ router.put('/:id', upload.single('image'), async (req, res) => {
 
 })
 
+//incrementProductInventoryQuantity
+router.put('/incrementInventoryQuantity/:id', async (req, res) => {
+    const { quantity } = req.body
+    const product = await productService.incrementProductInventoryQuantity(Number(req.params.id), Number(quantity))
+    res.json(product)
+})
+
+//decrementProductInventoryQuantity
+router.put('/decrementInventoryQuantity/:id', async (req, res) => {
+    const { quantity } = req.body
+    const product = await productService.decrementProductInventoryQuantity(Number(req.params.id), Number(quantity))
+    res.json(product)
+})
+
 router.delete('/:id', async (req, res) => {
     const prevProduct = await productService.getProduct(Number(req.params.id))
     if (prevProduct?.image) {

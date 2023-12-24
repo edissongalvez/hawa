@@ -2,25 +2,10 @@ import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
-export const createShoppingSession = async (userId: number, total: number) => {
-    const existingSession = await prisma.shoppingSession.findUnique({
-        where: {
-          userId: userId,
-        },
-    })
-      
-    if (existingSession) {
-        return existingSession
-    }
-
+export const createShoppingSession = async (userId: number) => {
     return await prisma.shoppingSession.create({
         data: {
-            user: {
-                connect: {
-                    id: userId
-                }
-            },
-            total
+            userId
         }
     })
 }
@@ -94,6 +79,32 @@ export const updateShoppingSession = async (id: number, userId: number, total: n
                 }
             },
             total
+        }
+    })
+}
+
+export const incrementShoppingSessionTotal = async (id: number, subtotal: number) => {
+    return await prisma.shoppingSession.update({
+        where: {
+            id
+        },
+        data: {
+            total: {
+                increment: subtotal
+            }
+        }
+    })
+}
+
+export const decrementShoppingSessionTotal = async (id: number, subtotal: number) => {
+    return await prisma.shoppingSession.update({
+        where: {
+            id
+        },
+        data: {
+            total: {
+                decrement: subtotal
+            }
         }
     })
 }
