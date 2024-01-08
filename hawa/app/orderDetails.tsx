@@ -33,7 +33,7 @@ export default function OrderDetailScreen() {
           fetchData()
     }, [])
 
-    return orderDetails && orderDetails.length > 1 ?
+    return orderDetails ?
         <>
             <Stack.Screen options={{ title: 'Historial de ordenes', presentation: 'card', headerTitleAlign: 'center' }} />
             <Body>

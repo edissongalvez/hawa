@@ -7,6 +7,7 @@ import PaymentTypeController, { PaymentType } from '../../classes/paymentType'
 import { Notify } from '../../components/Window'
 import { useUser } from '../../context/UserContext'
 import OrderDetailController from '../../classes/orderDetail'
+import ShoppingSessionController, { ShoppingSession } from '../../classes/shoppingSession'
 
 export default function CreatePaymentDetailScreen() {
     const { user, setUser } = useUser()
@@ -63,9 +64,13 @@ export default function CreatePaymentDetailScreen() {
                     formData.append('voucher', blob, voucherName)
                 }
 
-                OrderDetailController.transferCartToOrder(formData)
+                await OrderDetailController.transferCartToOrder(formData)
 
-                Notify({ title: 'Orden pagada', desc: 'Viva el capitalismo' })
+                const updatedSession = await ShoppingSessionController.getShoppingSessionForUser(user.id)
+                console.log(updatedSession)
+                setUser({ ...user, session: updatedSession })
+
+                Notify({ title: 'Orden pagada', desc: 'Comprobante de pago enviado' })
                 router.replace('/')
             } else {
                 Notify({ title: 'Datos inválidos', desc: 'Revise los datos' })
