@@ -1,13 +1,35 @@
 import express from 'express'
+import multer from 'multer'
+import fs from 'fs'
 
 import * as orderDetailService from '../services/orderDetails'
 
 const router = express.Router()
 
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'files/vouchers/')
+    },
+    filename: (req, file, cb) => {
+        cb(null, `${Date.now()} - ${file.originalname}`)
+    }
+})
+
+const upload = multer({ storage })
+
 router.post('/', async (req, res) => {
-    const {userId, total, paymentId} = req.body
-    const orderDetail = await orderDetailService.createOrderDetail(Number(userId), Number(total), Number(paymentId))
+    const {userId, total} = req.body
+    const orderDetail = await orderDetailService.createOrderDetail(Number(userId), Number(total))
     res.json(orderDetail)
+})
+
+router.post('/transferCartToOrder', upload.single('voucher'), async (req, res) => {
+    if (req.file) {
+        const { userId, paymentTypeId } = req.body
+        const voucherPath = req.file.path
+        const orderDetail = await orderDetailService.transferCartToOrder(Number(userId), Number(paymentTypeId), voucherPath)
+        res.json(orderDetail)
+    }
 })
 
 router.get('/', async (req, res) => {

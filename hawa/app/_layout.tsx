@@ -69,6 +69,8 @@ function RootLayoutNav() {
           <Stack.Screen name='user/login' options={{ title: 'Iniciar sesión', presentation: 'modal', headerTitleAlign: 'center' }} />
           <Stack.Screen name='user/create' options={{ title: 'Crear cuenta', presentation: 'formSheet', headerTitleAlign: 'center' }} />
           <Stack.Screen name='user/edit' options={{ title: 'Editar cuenta', presentation: 'card', headerTitleAlign: 'center' }} />
+
+          {/* <Stack.Screen name='orderDetails' options={{ title: 'Historial de ordenes', presentation: 'card', headerTitleAlign: 'center' }} /> */}
         </Stack>
       </ThemeProvider>
     </UserProvider>

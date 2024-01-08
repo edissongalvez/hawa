@@ -14,7 +14,7 @@ import productInventory from './app/apis/productInventory'
 import shoppingSession from './app/apis/shoppingSession'
 import user from './app/apis/user'
 import userAddress from './app/apis/userAddress'
-import userPayment from './app/apis/userPayment'
+import paymentType from './app/apis/paymentType'
 
 const app = express()
 app.use(bodyParser.json({ limit: '50mb' }))
@@ -37,7 +37,7 @@ app.use('/productInventory', productInventory)
 app.use('/shoppingSession', shoppingSession)
 app.use('/user', user)
 app.use('/userAddress', userAddress)
-app.use('/userPayment', userPayment)
+app.use('/paymentType', paymentType)
 
 app.use('/files', express.static(path.join(__dirname, 'files')))
 

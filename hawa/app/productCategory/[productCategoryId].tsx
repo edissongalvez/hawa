@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native'
 import { Stack, router, useLocalSearchParams } from 'expo-router'
 
 import ProductCategoryController, { ProductCategory } from '../../classes/productCategory'
-import { Body, ScrollView, Text, TrailingButton } from '../../components/Themed'
+import { Body, Text, TrailingButton } from '../../components/Themed'
 import { VerticalList } from '../../components/List'
 import { useUser } from '../../context/UserContext'
 

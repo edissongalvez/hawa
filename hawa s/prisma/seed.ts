@@ -107,22 +107,29 @@ async function main() {
         ]
     })
 
-    const newUserPayments = await prisma.userPayment.createMany({
+    // Shopping process
+
+    const newPaymentTypes = await prisma.paymentType.createMany({
         data: [
-            { userId: 2, paymentType: 'Yape', provider: 'BCP', accountNo: '123456789', expiry: '2023-12-31T23:59:59.999Z' },
-            { userId: 3, paymentType: 'Plin', provider: 'Interbank', accountNo: '987654321', expiry: '2024-06-30T23:59:59.999Z' },
-            { userId: 4, paymentType: 'Yape', provider: 'BCP', accountNo: '201234567', expiry: '2023-10-15T23:59:59.999Z' },
-            { userId: 5, paymentType: 'Plin', provider: 'Interbank', accountNo: '298765432', expiry: '2025-03-01T23:59:59.999Z' },
+            { paymentType: 'Yape', provider: 'BCP', accountNo: '123456789', expiry: '2023-12-31T23:59:59.999Z' },
+            { paymentType: 'Plin', provider: 'Interbank', accountNo: '987654321', expiry: '2024-06-30T23:59:59.999Z' },
+            { paymentType: 'Yape', provider: 'BCP', accountNo: '201234567', expiry: '2023-10-15T23:59:59.999Z' },
+            { paymentType: 'Plin', provider: 'Interbank', accountNo: '298765432', expiry: '2025-03-01T23:59:59.999Z' },
         ]
     })
 
-    // Shopping process
-
-    
+    const newPaymentStatuses = await prisma.paymentStatus.createMany({
+        data: [
+            { name: 'Recibido', desc: 'Pago a revisar' },
+            { name: 'Rechazado', desc: 'Pago no cubre los gastos' },
+            { name: 'Aceptado', desc: 'Pago completado' },
+        ]
+    })
 }
 
 main()
     .then(async () => {
+        console.log('📝 Registros creados')
         await prisma.$disconnect()
     })
     .catch(async (e) => {

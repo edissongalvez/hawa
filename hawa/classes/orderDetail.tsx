@@ -8,7 +8,6 @@ export interface OrderDetail {
     id: number,
     userId: number,
     total: number,
-    paymentId: number,
     createdAt: Date,
     modifiedAt: Date,
     user: User,
@@ -17,8 +16,13 @@ export interface OrderDetail {
 }
 
 export default class OrderDetailController {
-    static async createOrderDetail(userId: number, total: number, paymentId: number): Promise<OrderDetail> {
-        const response = await axios.post<OrderDetail>(`${process.env.EXPO_PUBLIC_API_URL}/orderDetail`, { userId, total, paymentId })
+    static async createOrderDetail(userId: number, total: number): Promise<OrderDetail> {
+        const response = await axios.post<OrderDetail>(`${process.env.EXPO_PUBLIC_API_URL}/orderDetail`, { userId, total })
+        return response.data
+    }
+
+    static async transferCartToOrder(formData: FormData): Promise<OrderDetail> {
+        const response = await axios.post<OrderDetail>(`${process.env.EXPO_PUBLIC_API_URL}/orderDetail/transferCartToOrder`, formData, { headers: { 'Content-Type': 'multipart/form-data' } })
         return response.data
     }
 
@@ -32,8 +36,8 @@ export default class OrderDetailController {
         return response.data
     }
 
-    static async updateOrderDetail(id: number, userId: number, total: number, paymentId: number): Promise<OrderDetail> {
-        const response = await axios.put<OrderDetail>(`${process.env.EXPO_PUBLIC_API_URL}/orderDetail/${id}`, { userId, total, paymentId })
+    static async updateOrderDetail(id: number, userId: number, total: number): Promise<OrderDetail> {
+        const response = await axios.put<OrderDetail>(`${process.env.EXPO_PUBLIC_API_URL}/orderDetail/${id}`, { userId, total })
         return response.data
     }
 

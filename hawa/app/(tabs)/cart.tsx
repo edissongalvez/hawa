@@ -22,7 +22,7 @@ export default function TabThreeScreen() {
                 }    
             })
         }
-    }, [user])
+    }, [])
 
     const handleSubmit = async (id: number) => {
         try {
@@ -41,7 +41,7 @@ export default function TabThreeScreen() {
         }
     }
 
-    return user && user.session && user.session.cartItems.length > 0 ?
+    return user && user.session && user.session.cartItems ?
         <Body>
             <Text style={styles.total}>S/. {user.session.total}</Text>
             { user.session.cartItems.map(cartItem => (

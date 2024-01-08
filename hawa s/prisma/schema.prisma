@@ -98,7 +98,6 @@ model User {
   createdAt   DateTime  @default(now())
   modifiedAt  DateTime  @updatedAt
   addresses   UserAddress[]
-  payments    UserPayment[] 
   session     ShoppingSession? 
   orders      OrderDetails[]
 }
@@ -111,16 +110,6 @@ model UserAddress {
   postalCode  String  @db.VarChar(5)
   country     String  @db.VarChar(16)
   telephone   String  @db.VarChar(9)
-  user        User    @relation(fields: [userId], references: [id])
-}
-
-model UserPayment {
-  id          Int     @id @default(autoincrement())
-  userId      Int
-  paymentType String  @db.VarChar(16)
-  provider    String  @db.VarChar(16)
-  accountNo   String  @db.VarChar(20)
-  expiry      DateTime
   user        User    @relation(fields: [userId], references: [id])
 }
 
@@ -152,7 +141,6 @@ model OrderDetails {
   id          Int       @id @default(autoincrement())
   userId      Int
   total       Decimal
-  paymentId   Int
   createdAt   DateTime  @default(now())
   modifiedAt  DateTime  @updatedAt
   user        User      @relation(fields: [userId], references: [id])
@@ -174,10 +162,30 @@ model OrderItems {
 model PaymentDetails {
   id          Int           @id @default(autoincrement())
   orderId     Int           @unique
-  amount      Int
-  provider    String        @db.VarChar(16)
-  status      String        @db.VarChar(16)
+  voucher     String
+  typeId      Int     
+  statusId    Int
   createdAt   DateTime      @default(now())
   modifiedAt  DateTime      @updatedAt
   order       OrderDetails  @relation(fields: [orderId], references: [id])
+  type        PaymentType   @relation(fields: [typeId], references: [id])
+  status      PaymentStatus @relation(fields: [statusId], references: [id])
+}
+
+model PaymentStatus {
+  id              Int       @id @default(autoincrement())
+  name            String    @db.VarChar(16)
+  desc            String    @db.VarChar(32)
+  createdAt       DateTime  @default(now())
+  modifiedAt      DateTime  @updatedAt
+  paymentDetails  PaymentDetails[]
+}
+
+model PaymentType {
+  id              Int       @id @default(autoincrement())
+  paymentType     String    @db.VarChar(16)
+  provider        String    @db.VarChar(16)
+  accountNo       String    @db.VarChar(20)
+  expiry          DateTime
+  paymentDetails  PaymentDetails[]
 }

@@ -1,6 +1,5 @@
 import axios from 'axios'
 import { UserAddress } from './userAddress'
-import { UserPayment } from './userPayment'
 import { ShoppingSession } from './shoppingSession'
 import { OrderDetail } from './orderDetail'
 
@@ -15,7 +14,6 @@ export interface User {
     createdAt: Date,
     modifiedAt: Date,
     addresses: UserAddress[],
-    payments: UserPayment[],
     session: ShoppingSession,
     orders: OrderDetail[]
 }

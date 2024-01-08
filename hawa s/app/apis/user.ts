@@ -26,7 +26,7 @@ router.post('/login', async (req, res) => {
 router.post('/', upload.single('image'), async (req, res) => {
     if (req.file) {
         const {username, password, firstName, lastName} = req.body
-        const imagePath = req.file?.path
+        const imagePath = req.file.path
         const user = await userService.createUser(username, password, imagePath, firstName, lastName)
         res.json(user)
     }

@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
-export const createPaymentDetail = async (orderId: number, amount: number, provider: string, status: string) => {
+export const createPaymentDetail = async (orderId: number, voucher: string, typeId: number, statusId: number) => {
     return await prisma.paymentDetails.create({
         data: {
             order: {
@@ -10,9 +10,17 @@ export const createPaymentDetail = async (orderId: number, amount: number, provi
                     id: orderId
                 }
             },
-            amount,
-            provider,
-            status
+            voucher,
+            type: {
+                connect: {
+                    id: typeId
+                }
+            },
+            status: {
+                connect: {
+                    id: statusId
+                }
+            }
         }
     })
 }
@@ -36,7 +44,7 @@ export const getPaymentDetail = async (id: number) => {
     })
 }
 
-export const updatePaymentDetail = async (id: number, orderId: number, amount: number, provider: string, status: string) => {
+export const updatePaymentDetail = async (id: number, orderId: number, voucher: string, typeId: number, statusId: number) => {
     return await prisma.paymentDetails.update({
         where: {
             id
@@ -47,9 +55,17 @@ export const updatePaymentDetail = async (id: number, orderId: number, amount: n
                     id: orderId
                 }
             },
-            amount,
-            provider,
-            status
+            voucher,
+            type: {
+                connect: {
+                    id: typeId
+                }
+            },
+            status: {
+                connect: {
+                    id: statusId
+                }
+            }
         }
     })
 }

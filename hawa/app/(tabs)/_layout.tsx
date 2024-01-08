@@ -133,7 +133,8 @@ export default function TabLayout() {
                   )}
                 </Pressable>
               </Link>
-              <Link href='/paymentDetail/create' asChild>
+
+              {user.session && <Link href='/paymentDetail/create' asChild>
                 <Pressable>
                   {({ pressed }) => (
                     <Ionicons
@@ -144,7 +145,7 @@ export default function TabLayout() {
                     />
                   )}
                 </Pressable>
-            </Link>
+            </Link>}
           </View> : null
           ),
         }} 

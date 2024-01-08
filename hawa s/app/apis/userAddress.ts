@@ -20,7 +20,7 @@ router.get('/:id', async (req, res) => {
 })
 
 router.put('/:id', async (req, res) => {
-    const {id, userId, addressLine, city, postalCode, country, telephone} = req.body
+    const { userId, addressLine, city, postalCode, country, telephone } = req.body
     const userAddress = await userAddressService.updateUserAddress(Number(req.params.id), userId, addressLine, city, postalCode, country, telephone)
     res.json(userAddress)
 })

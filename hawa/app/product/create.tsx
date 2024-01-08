@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Image, Pressable, StyleSheet } from 'react-native'
+import { Image, StyleSheet } from 'react-native'
 import * as ImagePicker from 'expo-image-picker'
 import { Body, Box, Button, Picker, PickerItem, ScrollView, Separator, TextField, Text, TrailingButton} from '../../components/Themed'
 import ProductCategoryController, { ProductCategory } from '../../classes/productCategory'

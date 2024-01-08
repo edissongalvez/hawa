@@ -22,10 +22,10 @@ export default function TabThreeScreen() {
             </Box>
             <Button secondary action='Editar cuenta' onPress={() => router.push('/user/edit')}/>
 
-            <Box header='MÉTODOS DE PAGO' footer='Se aceptan tarjetas de crédito, débito y otras formas seguras de pago para realizar transacciones en la aplicación.'>
+            {/* <Box header='MÉTODOS DE PAGO' footer='Se aceptan tarjetas de crédito, débito y otras formas seguras de pago para realizar transacciones en la aplicación.'>
                 { user.payments ? user.payments.map(payment => <View key={payment.id}><BoxItem  name={`${payment.paymentType} - ${payment.provider}`} value={payment.accountNo} /><Separator /></View>) : null }
             </Box>
-            <Button secondary action='Agregar método de pago'/>
+            <Button secondary action='Agregar método de pago'/> */}
             <Box header='DIRECCIONES' footer='Indica las direcciones donde deseas recibir tus pedidos, asegurándote de proporcionar la ubicación más conveniente para garantizar una entrega eficiente.'>
                 { user.addresses ? user.addresses.map(address => <View key={address.id}><BoxItem name={`${address.addressLine} - ${address.telephone}`} value={address.postalCode} /><Separator /></View>) : null }
             </Box>
