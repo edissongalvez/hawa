@@ -48,6 +48,11 @@ export default class PaymentDetailController {
         return response.data
     }
 
+    static async updatePaymentDetailStatus(id: number, statusId: number): Promise<PaymentDetail> {
+        const response = await axios.put<PaymentDetail>(`${process.env.EXPO_PUBLIC_API_URL}/paymentDetail/updatePaymentDetailStatus/${id}`, { statusId })
+        return response.data
+    }
+
     static async deletePaymentDetail(id: number): Promise<void> {
         await axios.delete(`${process.env.EXPO_PUBLIC_API_URL}/paymentDetail/${id}`)
     }

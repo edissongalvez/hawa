@@ -70,7 +70,11 @@ export const transferCartToOrder = async (userId: number, paymentTypeId: number,
 export const getOrderDetails = async () => {
     return await prisma.orderDetails.findMany({
         include: {
-            user: true,
+            user: {
+                include: {
+                    addresses: true
+                }
+            },
             payment: {
                 include: {
                     status: true,
@@ -92,7 +96,11 @@ export const getOrderDetail = async (id: number) => {
             id
         },
         include: {
-            user: true,
+            user: {
+                include: {
+                    addresses: true
+                }
+            },
             payment: {
                 include: {
                     status: true,

@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 import OrderDetailController, { OrderDetail } from '../classes/orderDetail'
 import { useUser } from '../context/UserContext'
-import { Body, Text, View } from '../components/Themed'
+import { Body, Text, View } from './Themed'
 import { Image, StyleSheet } from 'react-native'
 import { Stack } from 'expo-router'
-import { Notify } from '../components/Window'
+import { Notify } from './Window'
 
 export default function OrderDetailScreen() {
     const { user } = useUser()
@@ -40,7 +40,7 @@ export default function OrderDetailScreen() {
                 {orderDetails.map(orderDetail => (
                     <View key={orderDetail.id} lightColor='#FFFFFF' darkColor='#1C1C1E' style={styles.container}>
                         <View style={styles.item}>
-                            <Text tint style={styles.title}>S/. {orderDetail.total}</Text>
+                            <Text tint style={styles.title}>S/. {Number(orderDetail.total).toFixed(2)}</Text>
                             <Text secondary>{new Date(orderDetail.createdAt).toLocaleDateString()}</Text>
                             {orderDetail.orderItems.map(orderItem => (
                                 <Text key={orderItem.id}>{orderItem.product.name} · {orderItem.quantity}</Text>

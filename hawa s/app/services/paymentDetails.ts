@@ -70,6 +70,21 @@ export const updatePaymentDetail = async (id: number, orderId: number, voucher: 
     })
 }
 
+export const updatePaymentDetailStatus = async (id: number, statusId: number) => {
+    return await prisma.paymentDetails.update({
+        where: {
+            id
+        },
+        data: {
+            status: {
+                connect: {
+                    id: statusId
+                }
+            }
+        }
+    })
+} 
+
 export const deletePaymentDetail = async (id: number) => {
     return await prisma.paymentDetails.delete({
         where: {

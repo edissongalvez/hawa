@@ -55,6 +55,12 @@ router.put('/:id', upload.single('voucher'), async (req, res) => {
     res.json(paymentDetail)
 })
 
+router.put('/updatePaymentDetailStatus/:id', async (req, res) => {
+    const { statusId } = req.body
+    const paymentDetail = await paymentDetailService.updatePaymentDetailStatus(Number(req.params.id), Number(statusId))
+    res.json(paymentDetail)
+})
+
 router.delete('/:id', async (req, res) => {
     await paymentDetailService.deletePaymentDetail(Number(req.params.id))
     res.status(204).end()
