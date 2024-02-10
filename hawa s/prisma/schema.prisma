@@ -35,6 +35,7 @@ model Discount {
   id              Int       @id @default(autoincrement())
   name            String    @db.VarChar(32)
   desc            String    @db.VarChar(128)
+  image           String
   discountPercent Decimal
   active          Boolean   @default(false)
   createdAt       DateTime  @default(now())

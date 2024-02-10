@@ -4,7 +4,7 @@ import { Link, Stack, router, useLocalSearchParams } from 'expo-router'
 
 import { Body, Box, Button, Icon, Separator, Text, TextField, TrailingButton } from '../../components/Themed'
 import ProductController, { Product } from '../../classes/product'
-import { Notify } from '../../components/Window'
+import { Confirm, Notify } from '../../components/Window'
 import { useUser } from '../../context/UserContext'
 import ShoppingSessionController, { ShoppingSession } from '../../classes/shoppingSession'
 import CartItemController from '../../classes/cartItem'
@@ -29,7 +29,9 @@ export default function ProductScreen() {
                     setUser({...user, session: createdSession})
                 }
                 await CartItemController.createCartItem(createdSession.id, Number(productId), quantity)
-                Notify({ title: 'Añadido al carrito', desc: 'Carrito actualizado' })
+                // Notify({ title: 'Añadido al carrito', desc: 'Carrito actualizado' })
+
+                Confirm({ title: 'Añadido al carrito', desc: 'Carrito actualizado. ¿Ver carrito?', action: () => router.replace('/cart') })
 
                 const updatedSession = await ShoppingSessionController.getShoppingSessionForUser(user.id)
                 setUser({ ...user, session: updatedSession })
@@ -44,13 +46,13 @@ export default function ProductScreen() {
             <Stack.Screen options={{ title: 'Producto', presentation: 'formSheet', headerTitleAlign: 'center', headerRight: () => user?.adminUser ? <TrailingButton onPress={() => router.push(`/product/edit/${product.id}`)} label='Editar' /> : null }} /> 
             <Body>
                 <ImageBackground source={product.image === '/files/undefined' ? require('../../assets/images/icon.png') : { uri: `${process.env.EXPO_PUBLIC_API_URL}/${product.image.replace(/\\/g, '/')}` } } resizeMode='cover' style={styles.imageBackground} imageStyle={styles.image}>
-                    <View style={styles.card}>
-                        <Text style={{color: 'white', fontSize: 13}}>{product.category.name.toUpperCase()}</Text>
-                        <Text style={{color: 'white', fontWeight: 'bold'}}>{product.name}</Text>
-                        <Text secondary>{product.desc}</Text>
-                    </View>
                 </ImageBackground>
-                <Box>
+                <View style={styles.card}>
+                    <Text style={{fontSize: 13}}>{product.category.name.toUpperCase()}</Text>
+                    <Text style={{fontWeight: 'bold'}}>{product.name}</Text>
+                    <Text secondary>{product.desc}</Text>
+                </View>
+                <Box>  
                     <View style={styles.item}>
                         <Text>Existencias</Text>
                         <Text secondary>{product.inventory.quantity}</Text>

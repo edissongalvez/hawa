@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { Image, StyleSheet, View } from 'react-native'
 import { router } from 'expo-router'
 
 import { Notify } from '../../components/Window'
@@ -40,6 +40,7 @@ export default function LoginScreen() {
     return (
         <Body center>
             <View style={styles.content}>
+                <Image source={require('../../assets/images/icon.png')} style={styles.image} />
                 <Box>
                     <TextField placeholder='Usuario' value={data.username} onChangeText={handleChange('username')} />
                     <Separator />
@@ -66,5 +67,12 @@ const styles = StyleSheet.create({
     buttonGroup: {
         flexDirection: 'row',
         gap: 8
+    },
+    image: {
+        width: 128,
+        height: 128,
+        borderRadius: 26,
+        marginTop: 16,
+        alignSelf: 'center'
     }
 })
